@@ -1,0 +1,6 @@
+# Force Unix line endings on shell scripts and gradle wrapper
+android/gradlew text eol=lf
+*.sh text eol=lf
+
+# Default git attributes
+* text=auto

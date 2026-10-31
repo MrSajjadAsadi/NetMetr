@@ -1,0 +1,304 @@
+<Window x:Class="NetMetr.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="NetMetr - Settings &amp; Usage History"
+        Height="540" Width="680"
+        WindowStartupLocation="CenterScreen"
+        Background="#0F172A"
+        Foreground="#F8FAFC"
+        FontFamily="Segoe UI Variable, Segoe UI, sans-serif"
+        ResizeMode="CanResizeWithGrip">
+
+    <Window.Resources>
+        <!-- TabItem Style -->
+        <Style TargetType="TabItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border x:Name="TabBorder" Background="Transparent" BorderThickness="0,0,0,2" BorderBrush="Transparent" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter ContentSource="Header" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="TabBorder" Property="BorderBrush" Value="#38BDF8"/>
+                                <Setter Property="Foreground" Value="#38BDF8"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="#F8FAFC"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- CheckBox Style -->
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="#E2E8F0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="0,6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <!-- Modern ComboBox -->
+        <Style TargetType="ComboBox">
+            <Setter Property="Background" Value="#1E293B"/>
+            <Setter Property="Foreground" Value="#F8FAFC"/>
+            <Setter Property="BorderBrush" Value="#334155"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <!-- Modern Button -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#2563EB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="BtnBorder" Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="BtnBorder" Property="Background" Value="#1D4ED8"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="BtnBorder" Property="Background" Value="#1E40AF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Border Background="#2563EB" CornerRadius="8" Width="32" Height="32" Margin="0,0,12,0">
+                    <TextBlock Text="⚡" Foreground="White" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel>
+                    <TextBlock Text="NetMetr Settings" FontSize="18" FontWeight="Bold" Foreground="#F8FAFC"/>
+                    <TextBlock Text="Real-time Network Monitor &amp; Data Tracker" FontSize="12" Foreground="#94A3B8"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <!-- Tabs Content -->
+        <TabControl Grid.Row="1" Background="Transparent" BorderThickness="0">
+            <!-- TAB 1: General -->
+            <TabItem Header="⚙ General">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,12,0,0">
+                    <StackPanel>
+                        <Border Background="#1E293B" CornerRadius="8" Padding="16" BorderBrush="#334155" BorderThickness="1" Margin="0,0,0,14">
+                            <StackPanel>
+                                <TextBlock Text="Window Behavior" FontWeight="Bold" FontSize="14" Foreground="#38BDF8" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ChkAlwaysOnTop" Content="Always on Top (Keep widget above other applications)"/>
+                                <CheckBox x:Name="ChkLockPosition" Content="Lock Widget Position (Prevent accidental dragging)"/>
+                                <CheckBox x:Name="ChkSnapEdges" Content="Snap to Screen Edges when dragging"/>
+                                <CheckBox x:Name="ChkStartOnBoot" Content="Start NetMetr automatically with Windows"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="#1E293B" CornerRadius="8" Padding="16" BorderBrush="#334155" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="Transparency &amp; View" FontWeight="Bold" FontSize="14" Foreground="#38BDF8" Margin="0,0,0,10"/>
+
+                                <Grid Margin="0,4,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Widget Opacity" VerticalAlignment="Center" Foreground="#E2E8F0"/>
+                                    <TextBlock x:Name="TxtOpacityValue" Grid.Column="1" Text="92%" Foreground="#94A3B8" FontWeight="SemiBold"/>
+                                </Grid>
+                                <Slider x:Name="SliderOpacity" Minimum="0.3" Maximum="1.0" Value="0.92" TickFrequency="0.05"
+                                        ValueChanged="SliderOpacity_ValueChanged" Margin="0,0,0,8"/>
+
+                                <CheckBox x:Name="ChkCompactDefault" Content="Launch in Compact Mode by default"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- TAB 2: Network & Monitoring -->
+            <TabItem Header="🌐 Network">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,12,0,0">
+                    <StackPanel>
+                        <Border Background="#1E293B" CornerRadius="8" Padding="16" BorderBrush="#334155" BorderThickness="1" Margin="0,0,0,14">
+                            <StackPanel>
+                                <TextBlock Text="Interface &amp; Units" FontWeight="Bold" FontSize="14" Foreground="#38BDF8" Margin="0,0,0,12"/>
+
+                                <TextBlock Text="Network Adapter:" Foreground="#CBD5E1" Margin="0,0,0,4"/>
+                                <ComboBox x:Name="CmbAdapters" DisplayMemberPath="Name" Margin="0,0,0,14"/>
+
+                                <TextBlock Text="Speed Display Unit:" Foreground="#CBD5E1" Margin="0,0,0,4"/>
+                                <ComboBox x:Name="CmbSpeedUnits" Margin="0,0,0,14">
+                                    <ComboBoxItem Content="Bytes/second (B/s, KB/s, MB/s, GB/s)"/>
+                                    <ComboBoxItem Content="Bits/second (bps, Kbps, Mbps, Gbps)"/>
+                                </ComboBox>
+
+                                <TextBlock Text="Refresh Interval:" Foreground="#CBD5E1" Margin="0,0,0,4"/>
+                                <ComboBox x:Name="CmbInterval">
+                                    <ComboBoxItem Content="500 ms (Fastest response)"/>
+                                    <ComboBoxItem Content="1000 ms (Default, Recommended)"/>
+                                    <ComboBoxItem Content="2000 ms (Lowest CPU usage)"/>
+                                </ComboBox>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="#1E293B" CornerRadius="8" Padding="16" BorderBrush="#334155" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="Latency / Ping Monitor" FontWeight="Bold" FontSize="14" Foreground="#38BDF8" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ChkEnablePing" Content="Enable Real-Time Ping Monitoring"/>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Ping Host:" Foreground="#CBD5E1" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                    <TextBox x:Name="TxtPingHost" Grid.Column="1" Background="#0F172A" Foreground="#F8FAFC"
+                                             BorderBrush="#334155" Padding="8,4" FontSize="13"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- TAB 3: Usage History -->
+            <TabItem Header="📊 Usage History">
+                <Grid Margin="0,12,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Summary Cards -->
+                    <Grid Grid.Row="0" Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Today Card -->
+                        <Border Grid.Column="0" Background="#1E293B" CornerRadius="8" Padding="12,10" BorderBrush="#10B981" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="TODAY" FontSize="10" FontWeight="Bold" Foreground="#10B981"/>
+                                <TextBlock x:Name="TxtCardToday" Text="0 MB" FontSize="16" FontWeight="Bold" Foreground="#F8FAFC" Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- 7 Days Card -->
+                        <Border Grid.Column="2" Background="#1E293B" CornerRadius="8" Padding="12,10" BorderBrush="#38BDF8" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="LAST 7 DAYS" FontSize="10" FontWeight="Bold" Foreground="#38BDF8"/>
+                                <TextBlock x:Name="TxtCard7Days" Text="0 MB" FontSize="16" FontWeight="Bold" Foreground="#F8FAFC" Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- 30 Days Card -->
+                        <Border Grid.Column="4" Background="#1E293B" CornerRadius="8" Padding="12,10" BorderBrush="#A78BFA" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="LAST 30 DAYS" FontSize="10" FontWeight="Bold" Foreground="#A78BFA"/>
+                                <TextBlock x:Name="TxtCard30Days" Text="0 MB" FontSize="16" FontWeight="Bold" Foreground="#F8FAFC" Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Data Grid of History -->
+                    <Border Grid.Row="1" Background="#1E293B" CornerRadius="8" Padding="8" BorderBrush="#334155" BorderThickness="1">
+                        <DataGrid x:Name="GridHistory" AutoGenerateColumns="False" IsReadOnly="True"
+                                  Background="Transparent" RowBackground="#162234" AlternatingRowBackground="#1A273C"
+                                  Foreground="#F8FAFC" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#334155"
+                                  BorderThickness="0" HeadersVisibility="Column">
+                            <DataGrid.ColumnHeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="#0F172A"/>
+                                    <Setter Property="Foreground" Value="#94A3B8"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Padding" Value="8,6"/>
+                                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                    <Setter Property="BorderBrush" Value="#334155"/>
+                                </Style>
+                            </DataGrid.ColumnHeaderStyle>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="120"/>
+                                <DataGridTextColumn Header="Downloaded" Binding="{Binding DownloadFormatted}" Width="*"/>
+                                <DataGridTextColumn Header="Uploaded" Binding="{Binding UploadFormatted}" Width="*"/>
+                                <DataGridTextColumn Header="Total Usage" Binding="{Binding TotalFormatted}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- TAB 4: About -->
+            <TabItem Header="ℹ About">
+                <Border Background="#1E293B" CornerRadius="8" Padding="20" Margin="0,12,0,0" BorderBrush="#334155" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="NetMetr v1.0.0" FontSize="16" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,8"/>
+                        <TextBlock Text="A modern, high-performance network speed meter and bandwidth tracker for Windows &amp; Android."
+                                   Foreground="#CBD5E1" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                        <Separator Background="#334155" Margin="0,0,0,10"/>
+                        <TextBlock Text="Features:" FontWeight="Bold" Foreground="#F8FAFC" Margin="0,0,0,6"/>
+                        <TextBlock Text="• Draggable floating overlay with snap-to-edge support" Foreground="#94A3B8" Margin="0,0,0,4"/>
+                        <TextBlock Text="• Real-time download/upload speed waveform sparkline" Foreground="#94A3B8" Margin="0,0,0,4"/>
+                        <TextBlock Text="• Low-latency ping &amp; connection status monitor" Foreground="#94A3B8" Margin="0,0,0,4"/>
+                        <TextBlock Text="• Daily bandwidth tracking with historical logs" Foreground="#94A3B8" Margin="0,0,0,4"/>
+                        <TextBlock Text="• Ultra-lightweight resource usage (~0.1% CPU)" Foreground="#94A3B8" Margin="0,0,0,4"/>
+                        <TextBlock Text="• Paired companion Android application with ongoing notification" Foreground="#94A3B8" Margin="0,0,0,4"/>
+                    </StackPanel>
+                </Border>
+            </TabItem>
+        </TabControl>
+
+        <!-- Bottom Actions -->
+        <Grid Grid.Row="2" Margin="0,16,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Content="Reset Today Stats" Background="#DC2626" Click="BtnResetToday_Click"/>
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <Button Content="Cancel" Background="#334155" Margin="0,0,10,0" Click="BtnCancel_Click"/>
+                <Button Content="Save &amp; Apply" Background="#2563EB" Click="BtnSave_Click"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

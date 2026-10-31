@@ -1,0 +1,29 @@
+# Build results
+bin/
+obj/
+publish/
+*.exe
+*.dll
+*.pdb
+*.apk
+*.aab
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio / Rider / Android Studio
+.vs/
+.idea/
+*.iml
+.gradle/
+build/
+local.properties
+.cxx/
+Captures/
+
+# Windows desktop runtime logs/json
+daily_usage.json
+settings.json

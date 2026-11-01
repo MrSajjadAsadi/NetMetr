@@ -43,9 +43,10 @@ public static class Formatter
         return $"{b:F0} B";
     }
 
-    public static string FormatLatency(long latencyMs)
+    public static string FormatLatency(long latencyMs, bool isConnected = true)
     {
-        if (latencyMs < 0) return "Offline";
+        if (!isConnected) return "Offline";
+        if (latencyMs < 0) return "-- ms";
         return $"{latencyMs} ms";
     }
 }

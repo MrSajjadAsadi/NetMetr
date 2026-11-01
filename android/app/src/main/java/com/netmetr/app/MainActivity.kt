@@ -174,5 +174,4 @@ fun MainAppScreen(usageTracker: UsageTracker) {
             }
         }
     }
-    }
 }

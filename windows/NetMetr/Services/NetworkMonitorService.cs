@@ -22,12 +22,14 @@ public class NetworkMonitorService : IDisposable
     private readonly PingService _pingService = new();
     private readonly UsageTrackerService _usageTracker;
 
+    private readonly Dictionary<string, (long Rx, long Tx)> _perAdapterLastStats = new();
     private long _lastBytesReceived;
     private long _lastBytesSent;
     private DateTime _lastSampleTime = DateTime.UtcNow;
     private bool _isFirstSample = true;
     private int _pingCounter = 0;
     private long _lastPingLatency = -1;
+    private string _currentActiveAdapterName = "Auto";
 
     public event Action<NetworkSpeed>? SpeedUpdated;
 
@@ -46,6 +48,7 @@ public class NetworkMonitorService : IDisposable
     public void Start()
     {
         _isFirstSample = true;
+        _perAdapterLastStats.Clear();
         _timer.Start();
     }
 
@@ -63,7 +66,7 @@ public class NetworkMonitorService : IDisposable
     {
         var list = new List<NetworkAdapterInfo>
         {
-            new() { Id = "ALL", Name = "All Active Adapters", Description = "Combined throughput across all interfaces", Type = NetworkInterfaceType.Unknown, IsUp = true }
+            new() { Id = "ALL", Name = "All Active Adapters (Auto)", Description = "Combined throughput across all interfaces", Type = NetworkInterfaceType.Unknown, IsUp = true }
         };
 
         try
@@ -71,8 +74,7 @@ public class NetworkMonitorService : IDisposable
             var interfaces = NetworkInterface.GetAllNetworkInterfaces();
             foreach (var ni in interfaces)
             {
-                if (ni.NetworkInterfaceType == NetworkInterfaceType.Loopback ||
-                    ni.NetworkInterfaceType == NetworkInterfaceType.Tunnel)
+                if (ni.NetworkInterfaceType == NetworkInterfaceType.Loopback)
                     continue;
 
                 list.Add(new NetworkAdapterInfo
@@ -103,8 +105,8 @@ public class NetworkMonitorService : IDisposable
 
             long currentRx = 0;
             long currentTx = 0;
-            string activeName = "All Active";
-            string activeType = "Mixed";
+            string topAdapterName = _currentActiveAdapterName;
+            long topDelta = 0;
             string localIp = "-";
             bool hasConnectedInterface = false;
 
@@ -113,8 +115,7 @@ public class NetworkMonitorService : IDisposable
             foreach (var ni in interfaces)
             {
                 if (ni.OperationalStatus != OperationalStatus.Up ||
-                    ni.NetworkInterfaceType == NetworkInterfaceType.Loopback ||
-                    ni.NetworkInterfaceType == NetworkInterfaceType.Tunnel)
+                    ni.NetworkInterfaceType == NetworkInterfaceType.Loopback)
                     continue;
 
                 if (SelectedAdapterId != "ALL" && ni.Id != SelectedAdapterId)
@@ -123,15 +124,36 @@ public class NetworkMonitorService : IDisposable
                 try
                 {
                     var stats = ni.GetIPStatistics();
-                    currentRx += stats.BytesReceived;
-                    currentTx += stats.BytesSent;
+                    long niRx = stats.BytesReceived;
+                    long niTx = stats.BytesSent;
+
+                    currentRx += niRx;
+                    currentTx += niTx;
                     hasConnectedInterface = true;
 
-                    if (SelectedAdapterId != "ALL" || (activeName == "All Active" && stats.BytesReceived > 0))
+                    // Calculate per-adapter delta to identify which interface is actually moving data
+                    if (_perAdapterLastStats.TryGetValue(ni.Id, out var prevStats))
                     {
-                        activeName = ni.Name;
-                        activeType = ni.NetworkInterfaceType.ToString();
-                        
+                        long dRx = Math.Max(0, niRx - prevStats.Rx);
+                        long dTx = Math.Max(0, niTx - prevStats.Tx);
+                        long dTotal = dRx + dTx;
+
+                        if (dTotal > topDelta)
+                        {
+                            topDelta = dTotal;
+                            topAdapterName = ni.Name;
+                        }
+                    }
+
+                    _perAdapterLastStats[ni.Id] = (niRx, niTx);
+
+                    if (SelectedAdapterId != "ALL")
+                    {
+                        topAdapterName = ni.Name;
+                    }
+
+                    if (localIp == "-" && stats.BytesReceived > 0)
+                    {
                         var ipProps = ni.GetIPProperties();
                         foreach (var unicast in ipProps.UnicastAddresses)
                         {
@@ -168,6 +190,15 @@ public class NetworkMonitorService : IDisposable
             double speedRx = deltaRx / elapsedSeconds;
             double speedTx = deltaTx / elapsedSeconds;
 
+            if (topDelta > 0)
+            {
+                _currentActiveAdapterName = topAdapterName;
+            }
+            else if (SelectedAdapterId == "ALL" && _currentActiveAdapterName == "Auto")
+            {
+                _currentActiveAdapterName = topAdapterName;
+            }
+
             // Track daily usage
             _usageTracker.RecordUsage(deltaRx, deltaTx);
 
@@ -183,9 +214,9 @@ public class NetworkMonitorService : IDisposable
                 DownloadBytesPerSec = speedRx,
                 UploadBytesPerSec = speedTx,
                 LatencyMs = EnablePing ? _lastPingLatency : -1,
-                IsConnected = hasConnectedInterface,
-                ActiveInterfaceName = activeName,
-                InterfaceType = activeType,
+                IsConnected = hasConnectedInterface || NetworkInterface.GetIsNetworkAvailable(),
+                ActiveInterfaceName = SelectedAdapterId == "ALL" ? _currentActiveAdapterName : topAdapterName,
+                InterfaceType = "Active",
                 LocalIpAddress = localIp
             };
 

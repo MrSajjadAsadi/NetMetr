@@ -105,17 +105,31 @@ public partial class MainWindow : Window
             TxtAdapterName.Text = speed.ActiveInterfaceName;
 
             // Ping display & indicator color
-            string pingStr = Formatter.FormatLatency(speed.LatencyMs);
+            string pingStr = Formatter.FormatLatency(speed.LatencyMs, speed.IsConnected);
             TxtPing.Text = pingStr;
             TxtCompactPing.Text = pingStr;
 
-            Brush pingBrush = speed.LatencyMs switch
+            Brush pingBrush;
+            if (!speed.IsConnected)
             {
-                < 0 => new SolidColorBrush(Color.FromRgb(239, 68, 68)),    // Red (offline)
-                < 70 => new SolidColorBrush(Color.FromRgb(16, 185, 129)),  // Green (good)
-                < 150 => new SolidColorBrush(Color.FromRgb(245, 158, 11)), // Amber (average)
-                _ => new SolidColorBrush(Color.FromRgb(239, 68, 68))       // Red (high)
-            };
+                pingBrush = new SolidColorBrush(Color.FromRgb(239, 68, 68)); // Red (disconnected)
+            }
+            else if (speed.LatencyMs < 0)
+            {
+                pingBrush = new SolidColorBrush(Color.FromRgb(56, 189, 248)); // Sky blue (connected, waiting/blocked ping)
+            }
+            else if (speed.LatencyMs < 70)
+            {
+                pingBrush = new SolidColorBrush(Color.FromRgb(16, 185, 129)); // Green (good)
+            }
+            else if (speed.LatencyMs < 160)
+            {
+                pingBrush = new SolidColorBrush(Color.FromRgb(245, 158, 11)); // Amber (average)
+            }
+            else
+            {
+                pingBrush = new SolidColorBrush(Color.FromRgb(239, 68, 68)); // Red (high latency)
+            }
             DotPing.Fill = pingBrush;
             DotCompactPing.Fill = pingBrush;
 

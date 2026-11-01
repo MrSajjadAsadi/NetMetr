@@ -23,8 +23,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Block
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
@@ -63,19 +61,15 @@ import com.netmetr.app.ui.theme.SurfaceCardBorder
 import com.netmetr.app.ui.theme.TextMuted
 import com.netmetr.app.ui.theme.TextPrimary
 import com.netmetr.app.ui.theme.TextSecondary
+import com.netmetr.app.util.AppStrings
 import com.netmetr.app.util.SpeedFormatter
-
-enum class AppFilter {
-    ALL,
-    ACTIVE_ONLY,
-    BLOCKED_ONLY
-}
 
 @Composable
 fun AppsScreen(
     appsList: List<AppUsageInfo>,
     firewallManager: AppFirewallManager,
-    onAppBlockedChanged: (String, Boolean) -> Unit
+    onAppBlockedChanged: (String, Boolean) -> Unit,
+    lang: String = "fa"
 ) {
     val context = LocalContext.current
     var searchQuery by remember { mutableStateOf("") }
@@ -115,13 +109,13 @@ fun AppsScreen(
     ) {
         // Header
         Text(
-            text = "App Network & Firewall",
+            text = AppStrings.get("apps_title", lang),
             color = TextPrimary,
             fontWeight = FontWeight.ExtraBold,
             fontSize = 24.sp
         )
         Text(
-            text = "Real-time per-app bandwidth usage & instant blocking",
+            text = AppStrings.get("apps_subtitle", lang),
             color = TextSecondary,
             fontSize = 13.sp
         )
@@ -149,16 +143,16 @@ fun AppsScreen(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = if (isFirewallRunning) "Firewall Active" else "Firewall Disabled",
+                        text = if (isFirewallRunning) AppStrings.get("firewall_active", lang) else AppStrings.get("firewall_disabled", lang),
                         color = TextPrimary,
                         fontWeight = FontWeight.Bold,
                         fontSize = 15.sp
                     )
                     Text(
                         text = if (isFirewallRunning)
-                            "Blocking network access for selected apps"
+                            AppStrings.get("firewall_active_desc", lang)
                         else
-                            "Turn on to enforce internet blocks",
+                            AppStrings.get("firewall_disabled_desc", lang),
                         color = TextSecondary,
                         fontSize = 12.sp
                     )
@@ -195,7 +189,7 @@ fun AppsScreen(
             value = searchQuery,
             onValueChange = { searchQuery = it },
             modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("Search apps...", color = TextMuted) },
+            placeholder = { Text(AppStrings.get("search_apps", lang), color = TextMuted) },
             leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search", tint = TextMuted) },
             singleLine = true,
             shape = RoundedCornerShape(12.dp),
@@ -219,7 +213,7 @@ fun AppsScreen(
             FilterChip(
                 selected = selectedFilter == AppFilter.ALL,
                 onClick = { selectedFilter = AppFilter.ALL },
-                label = { Text("All (${appsList.size})") },
+                label = { Text("${AppStrings.get("filter_all", lang)} (${appsList.size})") },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = PrimaryBlue,
                     selectedLabelColor = Color.White
@@ -229,7 +223,7 @@ fun AppsScreen(
             FilterChip(
                 selected = selectedFilter == AppFilter.ACTIVE_ONLY,
                 onClick = { selectedFilter = AppFilter.ACTIVE_ONLY },
-                label = { Text("Active (${appsList.count { it.totalSpeedBytes > 0 }})") },
+                label = { Text("${AppStrings.get("filter_active", lang)} (${appsList.count { it.totalSpeedBytes > 0 }})") },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = AccentGreen,
                     selectedLabelColor = Color.White
@@ -239,7 +233,7 @@ fun AppsScreen(
             FilterChip(
                 selected = selectedFilter == AppFilter.BLOCKED_ONLY,
                 onClick = { selectedFilter = AppFilter.BLOCKED_ONLY },
-                label = { Text("Blocked (${appsList.count { it.isBlocked }})") },
+                label = { Text("${AppStrings.get("filter_blocked", lang)} (${appsList.count { it.isBlocked }})") },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = AccentRed,
                     selectedLabelColor = Color.White
@@ -257,7 +251,7 @@ fun AppsScreen(
                     .padding(top = 40.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "No applications match your filter", color = TextMuted, fontSize = 13.sp)
+                Text(text = AppStrings.get("no_apps_found", lang), color = TextMuted, fontSize = 13.sp)
             }
         } else {
             LazyColumn(
@@ -266,6 +260,7 @@ fun AppsScreen(
                 items(filteredApps, key = { it.packageName }) { app ->
                     AppRowItem(
                         app = app,
+                        lang = lang,
                         onBlockToggled = { blocked ->
                             onAppBlockedChanged(app.packageName, blocked)
                         },
@@ -282,6 +277,7 @@ fun AppsScreen(
 @Composable
 fun AppRowItem(
     app: AppUsageInfo,
+    lang: String = "fa",
     onBlockToggled: (Boolean) -> Unit,
     onOpenSettings: () -> Unit
 ) {
@@ -337,7 +333,7 @@ fun AppRowItem(
                     if (app.isBlocked) {
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = "BLOCKED",
+                            text = AppStrings.get("status_blocked", lang),
                             color = AccentRed,
                             fontWeight = FontWeight.Bold,
                             fontSize = 10.sp
@@ -365,7 +361,7 @@ fun AppRowItem(
                     }
                 } else {
                     Text(
-                        text = "Total: ${SpeedFormatter.formatDataSize(app.todayBytes)}",
+                        text = "${AppStrings.get("total_usage", lang)}: ${SpeedFormatter.formatDataSize(app.todayBytes)}",
                         color = TextMuted,
                         fontSize = 11.sp
                     )

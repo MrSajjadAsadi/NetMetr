@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using NetMetr.Models;
 using NetMetr.Services;
+using NetMetr.Helpers;
 
 namespace NetMetr;
 
@@ -21,6 +22,7 @@ public partial class AppsWindow : Window
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+        FlowDirection = LocalizationManager.CurrentFlowDirection;
         _monitorService.Start();
     }
 

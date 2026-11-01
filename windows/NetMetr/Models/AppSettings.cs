@@ -21,4 +21,5 @@ public class AppSettings
     public bool EnablePing { get; set; } = true;
     public bool StartWithWindows { get; set; } = false;
     public bool SnapToEdges { get; set; } = true;
+    public string Language { get; set; } = "fa";
 }

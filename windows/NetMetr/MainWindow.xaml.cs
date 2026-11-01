@@ -53,7 +53,10 @@ public partial class MainWindow : Window
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+        LocalizationManager.SetLanguage(_settings.Language);
+        LocalizationManager.OnLanguageChanged += ApplyLocalization;
         ApplySettings();
+        ApplyLocalization();
         _monitorService.Start();
     }
 
@@ -89,6 +92,29 @@ public partial class MainWindow : Window
             Left = workArea.Right - 340;
             Top = workArea.Top + 40;
         }
+
+        ApplyLocalization();
+    }
+
+    private void ApplyLocalization()
+    {
+        FlowDirection = LocalizationManager.CurrentFlowDirection;
+        TxtAppTitle.Text = LocalizationManager.Get("AppName");
+        TxtLblDown.Text = "↓ " + LocalizationManager.Get("Download");
+        TxtLblUp.Text = "↑ " + LocalizationManager.Get("Upload");
+        TxtLblToday.Text = LocalizationManager.Get("Today");
+
+        MenuHeaderTitle.Header = LocalizationManager.Get("AppName") + " Speed Meter";
+        MenuCompactToggle.Header = _settings.IsCompactMode ? LocalizationManager.Get("ExpandedMode") : LocalizationManager.Get("CompactMode");
+        MenuAlwaysOnTop.Header = LocalizationManager.Get("AlwaysOnTop");
+        MenuLockPosition.Header = LocalizationManager.Get("LockPosition");
+        MenuOpacityHeader.Header = LocalizationManager.Get("Opacity");
+        MenuUnitHeader.Header = LocalizationManager.Get("SpeedUnit");
+        MenuAppsItem.Header = LocalizationManager.Get("AppManager");
+        MenuSettingsItem.Header = LocalizationManager.Get("SettingsAndHistory");
+        MenuResetItem.Header = LocalizationManager.Get("ResetToday");
+        MenuMinimizeItem.Header = LocalizationManager.Get("MinimizeToTray");
+        MenuExitItem.Header = LocalizationManager.Get("Exit");
     }
 
     private void MonitorService_SpeedUpdated(NetworkSpeed speed)

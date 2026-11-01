@@ -97,7 +97,8 @@ class UsageTracker(context: Context) {
             updateIntervalSec = prefs.getInt("update_interval", 1),
             startOnBoot = prefs.getBoolean("start_on_boot", true),
             showDailyUsageInNotification = prefs.getBoolean("show_daily_in_notif", true),
-            dailyQuotaMb = prefs.getLong("daily_quota_mb", 0L)
+            dailyQuotaMb = prefs.getLong("daily_quota_mb", 0L),
+            language = prefs.getString("language", "fa") ?: "fa"
         )
     }
 
@@ -108,6 +109,7 @@ class UsageTracker(context: Context) {
             .putBoolean("start_on_boot", settings.startOnBoot)
             .putBoolean("show_daily_in_notif", settings.showDailyUsageInNotification)
             .putLong("daily_quota_mb", settings.dailyQuotaMb)
+            .putString("language", settings.language)
             .apply()
     }
 }

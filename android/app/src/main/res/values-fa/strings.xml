@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">نت‌متر</string>
+    <string name="notification_channel_name">پایشگر سرعت و ترافیک شبکه</string>
+    <string name="notification_channel_desc">نمایش لحظه‌ای سرعت دانلود، آپلود و حجم مصرفی روزانه</string>
+    <string name="action_stop">توقف</string>
+    <string name="action_open">باز کردن برنامه</string>
+</resources>

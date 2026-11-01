@@ -25,5 +25,6 @@ data class SettingsData(
     val updateIntervalSec: Int = 1,
     val startOnBoot: Boolean = true,
     val showDailyUsageInNotification: Boolean = true,
-    val dailyQuotaMb: Long = 0 // 0 means no limit
+    val dailyQuotaMb: Long = 0, // 0 means no limit
+    val language: String = "fa" // "fa" (Persian - RTL) or "en" (English - LTR)
 )

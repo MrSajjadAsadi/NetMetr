@@ -57,8 +57,8 @@ public class AppNetworkInfo : INotifyPropertyChanged
     public string DownloadSpeedFormatted => Helpers.Formatter.FormatSpeed(DownloadSpeedBytesPerSec, SpeedUnit.BytesPerSecond);
     public string UploadSpeedFormatted => Helpers.Formatter.FormatSpeed(UploadSpeedBytesPerSec, SpeedUnit.BytesPerSecond);
     public string TotalUsageFormatted => Helpers.Formatter.FormatDataSize(TotalDownloadedBytes + TotalUploadedBytes);
-    public string StatusText => IsBlocked ? "Blocked" : "Active";
-    public string BlockButtonText => IsBlocked ? "Unblock" : "Block";
+    public string StatusText => IsBlocked ? Helpers.LocalizationManager.Get("StatusBlocked") : Helpers.LocalizationManager.Get("StatusActive");
+    public string BlockButtonText => IsBlocked ? Helpers.LocalizationManager.Get("BtnUnblock") : Helpers.LocalizationManager.Get("BtnBlock");
 
     public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string? name = null) =>

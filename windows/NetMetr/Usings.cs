@@ -6,3 +6,5 @@ global using Button = System.Windows.Controls.Button;
 global using Point = System.Windows.Point;
 global using Brush = System.Windows.Media.Brush;
 global using Color = System.Windows.Media.Color;
+global using FlowDirection = System.Windows.FlowDirection;
+global using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;

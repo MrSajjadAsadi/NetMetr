@@ -49,10 +49,12 @@ public partial class SettingsWindow : Window
 
         LoadUiValues();
         LoadHistoryData();
+        FlowDirection = LocalizationManager.CurrentFlowDirection;
     }
 
     private void LoadUiValues()
     {
+        CmbLanguage.SelectedIndex = UpdatedSettings.Language == "en" ? 1 : 0;
         ChkAlwaysOnTop.IsChecked = UpdatedSettings.AlwaysOnTop;
         ChkLockPosition.IsChecked = UpdatedSettings.IsLocked;
         ChkSnapEdges.IsChecked = UpdatedSettings.SnapToEdges;
@@ -116,6 +118,14 @@ public partial class SettingsWindow : Window
         }
     }
 
+    private void CmbLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (CmbLanguage == null) return;
+        UpdatedSettings.Language = CmbLanguage.SelectedIndex == 1 ? "en" : "fa";
+        LocalizationManager.SetLanguage(UpdatedSettings.Language);
+        FlowDirection = LocalizationManager.CurrentFlowDirection;
+    }
+
     private void BtnResetToday_Click(object sender, RoutedEventArgs e)
     {
         if (MessageBox.Show("Are you sure you want to reset today's statistics?", "Reset Today",
@@ -160,6 +170,9 @@ public partial class SettingsWindow : Window
         bool startWithWindows = ChkStartOnBoot.IsChecked == true;
         UpdatedSettings.StartWithWindows = startWithWindows;
         AutoStartHelper.SetAutoStart(startWithWindows);
+
+        UpdatedSettings.Language = CmbLanguage.SelectedIndex == 1 ? "en" : "fa";
+        LocalizationManager.SetLanguage(UpdatedSettings.Language);
 
         _usageTracker.SaveSettings(UpdatedSettings);
 

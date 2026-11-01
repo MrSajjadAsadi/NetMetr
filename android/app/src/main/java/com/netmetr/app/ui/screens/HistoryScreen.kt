@@ -29,11 +29,13 @@ import com.netmetr.app.ui.theme.SurfaceCardBorder
 import com.netmetr.app.ui.theme.TextMuted
 import com.netmetr.app.ui.theme.TextPrimary
 import com.netmetr.app.ui.theme.TextSecondary
+import com.netmetr.app.util.AppStrings
 import com.netmetr.app.util.SpeedFormatter
 
 @Composable
 fun HistoryScreen(
-    historyList: List<DailyUsageItem>
+    historyList: List<DailyUsageItem>,
+    lang: String = "fa"
 ) {
     val totalHistoryBytes = historyList.sumOf { it.totalBytes }
 
@@ -43,13 +45,13 @@ fun HistoryScreen(
             .padding(16.dp)
     ) {
         Text(
-            text = "Usage History",
+            text = AppStrings.get("history_title", lang),
             color = TextPrimary,
             fontWeight = FontWeight.ExtraBold,
             fontSize = 24.sp
         )
         Text(
-            text = "Data consumption logs over the last 30 days",
+            text = AppStrings.get("history_subtitle", lang),
             color = TextSecondary,
             fontSize = 13.sp
         )
@@ -71,7 +73,7 @@ fun HistoryScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column {
-                    Text(text = "TOTAL RECORDED USAGE", color = TextMuted, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                    Text(text = AppStrings.get("total_recorded", lang), color = TextMuted, fontSize = 11.sp, fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = SpeedFormatter.formatDataSize(totalHistoryBytes),
@@ -82,7 +84,7 @@ fun HistoryScreen(
                 }
 
                 Text(
-                    text = "${historyList.size} Days Logged",
+                    text = "${historyList.size} ${AppStrings.get("days_logged", lang)}",
                     color = AccentSky,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 12.sp
@@ -99,9 +101,7 @@ fun HistoryScreen(
                     .padding(top = 40.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "No history recorded yet", color = TextMuted, fontSize = 14.sp)
-                Spacer(modifier = Modifier.height(6.dp))
-                Text(text = "Data will be archived here as you browse", color = TextSecondary, fontSize = 12.sp)
+                Text(text = AppStrings.get("no_history", lang), color = TextMuted, fontSize = 14.sp)
             }
         } else {
             LazyColumn(
@@ -131,13 +131,13 @@ fun HistoryScreen(
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Row {
                                     Text(
-                                        text = "Wi-Fi: ${SpeedFormatter.formatDataSize(item.wifiTotal)}",
+                                        text = "${AppStrings.get("wifi", lang)}: ${SpeedFormatter.formatDataSize(item.wifiTotal)}",
                                         color = AccentSky,
                                         fontSize = 11.sp
                                     )
                                     Spacer(modifier = Modifier.padding(horizontal = 4.dp))
                                     Text(
-                                        text = "•  Mobile: ${SpeedFormatter.formatDataSize(item.mobileTotal)}",
+                                        text = "•  ${AppStrings.get("mobile", lang)}: ${SpeedFormatter.formatDataSize(item.mobileTotal)}",
                                         color = AccentGreen,
                                         fontSize = 11.sp
                                     )

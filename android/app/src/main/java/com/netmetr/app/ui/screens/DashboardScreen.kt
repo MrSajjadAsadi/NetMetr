@@ -40,9 +40,9 @@ import com.netmetr.app.ui.theme.AccentSky
 import com.netmetr.app.ui.theme.PrimaryBlue
 import com.netmetr.app.ui.theme.SurfaceCard
 import com.netmetr.app.ui.theme.SurfaceCardBorder
-import com.netmetr.app.ui.theme.TextMuted
 import com.netmetr.app.ui.theme.TextPrimary
 import com.netmetr.app.ui.theme.TextSecondary
+import com.netmetr.app.util.AppStrings
 import com.netmetr.app.util.SpeedFormatter
 
 @Composable
@@ -50,7 +50,8 @@ fun DashboardScreen(
     speedState: SpeedState,
     todayUsage: DailyUsageItem,
     isServiceRunning: Boolean,
-    useBits: Boolean
+    useBits: Boolean,
+    lang: String = "fa"
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
@@ -72,13 +73,13 @@ fun DashboardScreen(
         ) {
             Column {
                 Text(
-                    text = "NetMetr",
+                    text = AppStrings.get("app_title", lang),
                     color = TextPrimary,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 26.sp
                 )
                 Text(
-                    text = "Live Speed & Bandwidth Monitor",
+                    text = AppStrings.get("app_subtitle", lang),
                     color = TextSecondary,
                     fontSize = 13.sp
                 )
@@ -133,7 +134,7 @@ fun DashboardScreen(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = if (isServiceRunning) "Monitoring Active" else "Monitoring Paused",
+                        text = if (isServiceRunning) AppStrings.get("monitoring_active", lang) else AppStrings.get("monitoring_paused", lang),
                         color = TextPrimary,
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp
@@ -141,9 +142,9 @@ fun DashboardScreen(
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = if (isServiceRunning)
-                            "Notification is displaying live speeds"
+                            AppStrings.get("notif_active_desc", lang)
                         else
-                            "Turn on to see speeds in status bar",
+                            AppStrings.get("notif_paused_desc", lang),
                         color = TextSecondary,
                         fontSize = 12.sp
                     )
@@ -161,7 +162,6 @@ fun DashboardScreen(
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.White,
                         checkedTrackColor = PrimaryBlue,
-                        uncheckedThumbColor = TextMuted,
                         uncheckedTrackColor = SurfaceCardBorder
                     )
                 )
@@ -177,18 +177,20 @@ fun DashboardScreen(
         ) {
             SpeedCard(
                 modifier = Modifier.weight(1f),
-                title = "Download",
+                title = AppStrings.get("download", lang),
                 speedFormatted = downFormatted,
                 accentColor = AccentGreen,
-                iconSymbol = "↓"
+                iconSymbol = "↓",
+                subtitle = AppStrings.get("realtime_rate", lang)
             )
 
             SpeedCard(
                 modifier = Modifier.weight(1f),
-                title = "Upload",
+                title = AppStrings.get("upload", lang),
                 speedFormatted = upFormatted,
                 accentColor = AccentSky,
-                iconSymbol = "↑"
+                iconSymbol = "↑",
+                subtitle = AppStrings.get("realtime_rate", lang)
             )
         }
 
@@ -197,39 +199,9 @@ fun DashboardScreen(
         // Today's Usage Breakdown
         DailyUsageCard(
             modifier = Modifier.fillMaxWidth(),
-            usage = todayUsage
+            usage = todayUsage,
+            lang = lang
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Session Details Card
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = SurfaceCard),
-            border = BorderStroke(1.dp, SurfaceCardBorder)
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
-                Text(
-                    text = "STATUS BAR NOTIFICATION",
-                    color = AccentSky,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp,
-                    letterSpacing = 1.sp
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "• Updates continuously every second in your notification shade.\n• Displays live download and upload traffic alongside today's consumption.\n• Starts automatically on device restart if enabled in Settings.",
-                    color = TextSecondary,
-                    fontSize = 13.sp,
-                    lineHeight = 20.sp
-                )
-            }
-        }
 
         Spacer(modifier = Modifier.height(24.dp))
     }

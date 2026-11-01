@@ -28,15 +28,16 @@ import com.netmetr.app.ui.theme.AccentPurple
 import com.netmetr.app.ui.theme.AccentSky
 import com.netmetr.app.ui.theme.SurfaceCard
 import com.netmetr.app.ui.theme.SurfaceCardBorder
-import com.netmetr.app.ui.theme.TextMuted
 import com.netmetr.app.ui.theme.TextPrimary
 import com.netmetr.app.ui.theme.TextSecondary
+import com.netmetr.app.util.AppStrings
 import com.netmetr.app.util.SpeedFormatter
 
 @Composable
 fun DailyUsageCard(
     modifier: Modifier = Modifier,
-    usage: DailyUsageItem
+    usage: DailyUsageItem,
+    lang: String = "fa"
 ) {
     val total = usage.totalBytes
     val wifi = usage.wifiTotal
@@ -61,7 +62,7 @@ fun DailyUsageCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "TODAY'S DATA USAGE",
+                    text = AppStrings.get("today_usage", lang),
                     color = AccentPurple,
                     fontWeight = FontWeight.Bold,
                     fontSize = 12.sp,
@@ -121,7 +122,7 @@ fun DailyUsageCard(
                                 .background(AccentSky)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text(text = "Wi-Fi", color = TextSecondary, fontSize = 12.sp)
+                        Text(text = AppStrings.get("wifi", lang), color = TextSecondary, fontSize = 12.sp)
                     }
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
@@ -143,7 +144,7 @@ fun DailyUsageCard(
                                 .background(AccentGreen)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text(text = "Mobile Data", color = TextSecondary, fontSize = 12.sp)
+                        Text(text = AppStrings.get("mobile", lang), color = TextSecondary, fontSize = 12.sp)
                     }
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(

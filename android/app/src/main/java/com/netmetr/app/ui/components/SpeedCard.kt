@@ -33,7 +33,8 @@ fun SpeedCard(
     title: String,
     speedFormatted: String,
     accentColor: Color,
-    iconSymbol: String
+    iconSymbol: String,
+    subtitle: String? = null
 ) {
     Card(
         modifier = modifier,
@@ -86,7 +87,7 @@ fun SpeedCard(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = "Real-time rate",
+                text = subtitle ?: "Real-time rate",
                 color = TextMuted,
                 fontSize = 11.sp
             )

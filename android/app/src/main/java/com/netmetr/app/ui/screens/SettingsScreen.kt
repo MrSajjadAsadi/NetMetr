@@ -18,6 +18,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -35,9 +37,9 @@ import com.netmetr.app.ui.theme.AccentSky
 import com.netmetr.app.ui.theme.PrimaryBlue
 import com.netmetr.app.ui.theme.SurfaceCard
 import com.netmetr.app.ui.theme.SurfaceCardBorder
-import com.netmetr.app.ui.theme.TextMuted
 import com.netmetr.app.ui.theme.TextPrimary
 import com.netmetr.app.ui.theme.TextSecondary
+import com.netmetr.app.util.AppStrings
 
 @Composable
 fun SettingsScreen(
@@ -47,6 +49,7 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
+    val lang = settings.language
 
     Column(
         modifier = Modifier
@@ -55,16 +58,63 @@ fun SettingsScreen(
             .padding(16.dp)
     ) {
         Text(
-            text = "Settings",
+            text = AppStrings.get("settings_title", lang),
             color = TextPrimary,
             fontWeight = FontWeight.ExtraBold,
             fontSize = 24.sp
         )
         Text(
-            text = "Customize monitoring preferences and notifications",
+            text = AppStrings.get("settings_subtitle", lang),
             color = TextSecondary,
             fontSize = 13.sp
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Language Card (RTL / LTR)
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(containerColor = SurfaceCard),
+            border = BorderStroke(1.dp, SurfaceCardBorder)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = AppStrings.get("lang_section", lang),
+                    color = AccentSky,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp,
+                    letterSpacing = 1.sp
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    FilterChip(
+                        selected = settings.language == "fa",
+                        onClick = { onSettingsChanged(settings.copy(language = "fa")) },
+                        label = { Text("فارسی (راست‌چین)") },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = PrimaryBlue,
+                            selectedLabelColor = Color.White
+                        )
+                    )
+
+                    FilterChip(
+                        selected = settings.language == "en",
+                        onClick = { onSettingsChanged(settings.copy(language = "en")) },
+                        label = { Text("English (LTR)") },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = PrimaryBlue,
+                            selectedLabelColor = Color.White
+                        )
+                    )
+                }
+            }
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -77,7 +127,7 @@ fun SettingsScreen(
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "DISPLAY & UNITS",
+                    text = AppStrings.get("display_units_section", lang),
                     color = AccentSky,
                     fontWeight = FontWeight.Bold,
                     fontSize = 12.sp,
@@ -93,9 +143,9 @@ fun SettingsScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
-                        Text(text = "Use Bits/sec (Mbps / Kbps)", color = TextPrimary, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                        Text(text = AppStrings.get("use_bits", lang), color = TextPrimary, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
                         Text(
-                            text = if (settings.useBits) "Displaying network bits (Mbps)" else "Displaying bytes (MB/s)",
+                            text = if (settings.useBits) AppStrings.get("use_bits_desc_on", lang) else AppStrings.get("use_bits_desc_off", lang),
                             color = TextSecondary,
                             fontSize = 12.sp
                         )
@@ -116,9 +166,9 @@ fun SettingsScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
-                        Text(text = "Show Daily Usage in Notification", color = TextPrimary, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                        Text(text = AppStrings.get("show_daily_notif", lang), color = TextPrimary, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
                         Text(
-                            text = "Display today's downloaded and uploaded amount in status bar",
+                            text = AppStrings.get("show_daily_notif_desc", lang),
                             color = TextSecondary,
                             fontSize = 12.sp
                         )
@@ -143,7 +193,7 @@ fun SettingsScreen(
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "SYSTEM & AUTORUN",
+                    text = AppStrings.get("system_section", lang),
                     color = AccentSky,
                     fontWeight = FontWeight.Bold,
                     fontSize = 12.sp,
@@ -159,9 +209,9 @@ fun SettingsScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
-                        Text(text = "Start on Device Boot", color = TextPrimary, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                        Text(text = AppStrings.get("start_on_boot", lang), color = TextPrimary, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
                         Text(
-                            text = "Automatically resume monitoring after restarting device",
+                            text = AppStrings.get("start_on_boot_desc", lang),
                             color = TextSecondary,
                             fontSize = 12.sp
                         )
@@ -186,7 +236,7 @@ fun SettingsScreen(
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "DATA MANAGEMENT",
+                    text = AppStrings.get("data_mgmt_section", lang),
                     color = AccentRed,
                     fontWeight = FontWeight.Bold,
                     fontSize = 12.sp,
@@ -196,7 +246,7 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
-                    text = "Clear today's measured bandwidth counter back to zero.",
+                    text = AppStrings.get("reset_today_desc", lang),
                     color = TextSecondary,
                     fontSize = 13.sp
                 )
@@ -206,34 +256,13 @@ fun SettingsScreen(
                 Button(
                     onClick = {
                         onResetToday()
-                        Toast.makeText(context, "Today's statistics reset", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, AppStrings.get("reset_toast", lang), Toast.LENGTH_SHORT).show()
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = AccentRed),
                     shape = RoundedCornerShape(8.dp)
                 ) {
-                    Text(text = "Reset Today's Stats", fontWeight = FontWeight.Bold)
+                    Text(text = AppStrings.get("btn_reset_today", lang), fontWeight = FontWeight.Bold)
                 }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // About NetMetr
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = SurfaceCard),
-            border = BorderStroke(1.dp, SurfaceCardBorder)
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(text = "NetMetr v1.0.0", color = TextPrimary, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Cross-platform Real-time Network Speed Meter & Bandwidth Tracker.\nCompanion to the Windows desktop draggable overlay app.",
-                    color = TextSecondary,
-                    fontSize = 12.sp,
-                    lineHeight = 18.sp
-                )
             }
         }
 

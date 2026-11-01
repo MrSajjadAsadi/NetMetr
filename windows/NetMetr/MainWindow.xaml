@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="NetMetr Overlay"
+        FontFamily="Segoe UI Variable, Segoe UI, Tahoma, Vazirmatn, Arial, sans-serif"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
@@ -55,30 +56,30 @@
 
     <!-- Right-click Context Menu -->
     <Window.ContextMenu>
-        <ContextMenu>
-            <MenuItem Header="NetMetr Speed Meter" IsEnabled="False" FontWeight="Bold"/>
+        <ContextMenu x:Name="MainMenu">
+            <MenuItem x:Name="MenuHeaderTitle" Header="NetMetr Speed Meter" IsEnabled="False" FontWeight="Bold"/>
             <Separator Background="#334155"/>
             <MenuItem x:Name="MenuCompactToggle" Header="Compact Mode" Click="MenuCompactToggle_Click"/>
             <MenuItem x:Name="MenuAlwaysOnTop" Header="Always On Top" IsCheckable="True" IsChecked="True" Click="MenuAlwaysOnTop_Click"/>
             <MenuItem x:Name="MenuLockPosition" Header="Lock Position (No Drag)" IsCheckable="True" Click="MenuLockPosition_Click"/>
-            <MenuItem Header="Opacity">
+            <MenuItem x:Name="MenuOpacityHeader" Header="Opacity">
                 <MenuItem Header="100%" Click="MenuOpacity_Click" Tag="1.0"/>
                 <MenuItem Header="90%" Click="MenuOpacity_Click" Tag="0.9"/>
                 <MenuItem Header="75%" Click="MenuOpacity_Click" Tag="0.75"/>
                 <MenuItem Header="60%" Click="MenuOpacity_Click" Tag="0.6"/>
                 <MenuItem Header="45%" Click="MenuOpacity_Click" Tag="0.45"/>
             </MenuItem>
-            <MenuItem Header="Speed Unit">
+            <MenuItem x:Name="MenuUnitHeader" Header="Speed Unit">
                 <MenuItem Header="Bytes/s (KB/s, MB/s)" Click="MenuUnit_Click" Tag="Bytes"/>
                 <MenuItem Header="Bits/s (Kbps, Mbps)" Click="MenuUnit_Click" Tag="Bits"/>
             </MenuItem>
             <Separator Background="#334155"/>
-            <MenuItem Header="🛡 App Network &amp; Firewall..." Click="MenuApps_Click" FontWeight="SemiBold" Foreground="#38BDF8"/>
-            <MenuItem Header="Settings &amp; History..." Click="MenuSettings_Click"/>
-            <MenuItem Header="Reset Today's Stats" Click="MenuResetToday_Click"/>
-            <MenuItem Header="Minimize to Tray" Click="MenuMinimizeToTray_Click"/>
+            <MenuItem x:Name="MenuAppsItem" Header="🛡 App Network &amp; Firewall..." Click="MenuApps_Click" FontWeight="SemiBold" Foreground="#38BDF8"/>
+            <MenuItem x:Name="MenuSettingsItem" Header="Settings &amp; History..." Click="MenuSettings_Click"/>
+            <MenuItem x:Name="MenuResetItem" Header="Reset Today's Stats" Click="MenuResetToday_Click"/>
+            <MenuItem x:Name="MenuMinimizeItem" Header="Minimize to Tray" Click="MenuMinimizeToTray_Click"/>
             <Separator Background="#334155"/>
-            <MenuItem Header="Exit NetMetr" Click="MenuExit_Click"/>
+            <MenuItem x:Name="MenuExitItem" Header="Exit NetMetr" Click="MenuExit_Click"/>
         </ContextMenu>
     </Window.ContextMenu>
 
@@ -146,7 +147,7 @@
                                 <Border Background="#2563EB" CornerRadius="5" Width="20" Height="20" Margin="0,0,6,0">
                                     <TextBlock Text="⚡" Foreground="White" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
-                                <TextBlock Text="NetMetr" Foreground="#F8FAFC" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="TxtAppTitle" Text="NetMetr" Foreground="#F8FAFC" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
                                 <Border Background="#1E293B" CornerRadius="4" Padding="5,1" Margin="6,0,0,0" VerticalAlignment="Center">
                                     <TextBlock x:Name="TxtAdapterName" Text="Wi-Fi" Foreground="#94A3B8" FontSize="10"/>
                                 </Border>
@@ -191,7 +192,7 @@
                             <Border Grid.Column="0" Background="#132338" CornerRadius="8" Padding="10,8" BorderBrush="#1E3A5F" BorderThickness="1">
                                 <StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
-                                        <TextBlock Text="↓ DOWNLOAD" Foreground="#10B981" FontSize="9.5" FontWeight="Bold"/>
+                                        <TextBlock x:Name="TxtLblDown" Text="↓ DOWNLOAD" Foreground="#10B981" FontSize="9.5" FontWeight="Bold"/>
                                     </StackPanel>
                                     <TextBlock x:Name="TxtDownSpeed" Text="0.0 KB/s" Foreground="#10B981" FontSize="17" FontWeight="Bold"/>
                                 </StackPanel>
@@ -201,7 +202,7 @@
                             <Border Grid.Column="2" Background="#0C253B" CornerRadius="8" Padding="10,8" BorderBrush="#0F4264" BorderThickness="1">
                                 <StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
-                                        <TextBlock Text="↑ UPLOAD" Foreground="#38BDF8" FontSize="9.5" FontWeight="Bold"/>
+                                        <TextBlock x:Name="TxtLblUp" Text="↑ UPLOAD" Foreground="#38BDF8" FontSize="9.5" FontWeight="Bold"/>
                                     </StackPanel>
                                     <TextBlock x:Name="TxtUpSpeed" Text="0.0 KB/s" Foreground="#38BDF8" FontSize="17" FontWeight="Bold"/>
                                 </StackPanel>
@@ -224,7 +225,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Text="TODAY" Foreground="#A78BFA" FontSize="9.5" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock x:Name="TxtLblToday" Text="TODAY" Foreground="#A78BFA" FontSize="9.5" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,6,0"/>
 
                                 <TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="11">
                                     <Run Text="↓ " Foreground="#10B981" FontWeight="Bold"/><Run x:Name="TxtTodayDown" Text="0 MB" Foreground="#E2E8F0" FontWeight="SemiBold"/>

@@ -64,6 +64,12 @@ import com.netmetr.app.ui.theme.TextSecondary
 import com.netmetr.app.util.AppStrings
 import com.netmetr.app.util.SpeedFormatter
 
+enum class AppFilter {
+    ALL,
+    ACTIVE_ONLY,
+    BLOCKED_ONLY
+}
+
 @Composable
 fun AppsScreen(
     appsList: List<AppUsageInfo>,
@@ -73,7 +79,7 @@ fun AppsScreen(
 ) {
     val context = LocalContext.current
     var searchQuery by remember { mutableStateOf("") }
-    var selectedFilter by remember { mutableStateOf(AppFilter.ALL) }
+    var selectedFilter by remember { mutableStateOf<AppFilter>(AppFilter.ALL) }
     var isFirewallRunning by remember { mutableStateOf(firewallManager.isFirewallEnabled()) }
 
     // Launcher for VPN permission

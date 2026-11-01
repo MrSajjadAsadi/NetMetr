@@ -37,6 +37,7 @@ object AppStrings {
             "filter_blocked" -> if (isFa) "مسدود" else "Blocked"
             "status_blocked" -> if (isFa) "مسدود" else "BLOCKED"
             "no_apps_found" -> if (isFa) "برنامه‌ای با این فیلتر یافت نشد" else "No applications match your filter"
+            "total_usage" -> if (isFa) "مصرف امروز" else "Today's usage"
 
             // History
             "history_title" -> if (isFa) "تاریخچه مصرف" else "Usage History"

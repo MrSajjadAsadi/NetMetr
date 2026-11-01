@@ -73,6 +73,7 @@
                 <MenuItem Header="Bits/s (Kbps, Mbps)" Click="MenuUnit_Click" Tag="Bits"/>
             </MenuItem>
             <Separator Background="#334155"/>
+            <MenuItem Header="🛡 App Network &amp; Firewall..." Click="MenuApps_Click" FontWeight="SemiBold" Foreground="#38BDF8"/>
             <MenuItem Header="Settings &amp; History..." Click="MenuSettings_Click"/>
             <MenuItem Header="Reset Today's Stats" Click="MenuResetToday_Click"/>
             <MenuItem Header="Minimize to Tray" Click="MenuMinimizeToTray_Click"/>
@@ -160,6 +161,11 @@
                                         <TextBlock x:Name="TxtPing" Text="-- ms" Foreground="#CBD5E1" FontSize="10" FontWeight="SemiBold"/>
                                     </StackPanel>
                                 </Border>
+
+                                <!-- Active Apps & Firewall Button -->
+                                <Button Click="MenuApps_Click" Background="Transparent" BorderThickness="0"
+                                        Foreground="#38BDF8" Content="🛡" FontSize="11" Margin="0,0,4,0"
+                                        Padding="3" Cursor="Hand" ToolTip="App Network &amp; Firewall Manager"/>
 
                                 <!-- Settings Button -->
                                 <Button Click="MenuSettings_Click" Background="Transparent" BorderThickness="0"

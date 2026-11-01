@@ -7,10 +7,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Assessment
+import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material3.Icon
@@ -27,9 +29,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
+import com.netmetr.app.data.AppFirewallManager
+import com.netmetr.app.data.AppNetworkManager
 import com.netmetr.app.data.SettingsData
 import com.netmetr.app.data.UsageTracker
 import com.netmetr.app.service.NetworkSpeedService
+import com.netmetr.app.ui.screens.AppsScreen
 import com.netmetr.app.ui.screens.DashboardScreen
 import com.netmetr.app.ui.screens.HistoryScreen
 import com.netmetr.app.ui.screens.SettingsScreen
@@ -38,11 +43,12 @@ import com.netmetr.app.ui.theme.BgDark
 import com.netmetr.app.ui.theme.NetMetrTheme
 import com.netmetr.app.ui.theme.SurfaceDark
 import com.netmetr.app.ui.theme.TextMuted
-import com.netmetr.app.ui.theme.TextPrimary
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var usageTracker: UsageTracker
+    private lateinit var appNetworkManager: AppNetworkManager
+    private lateinit var firewallManager: AppFirewallManager
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -55,14 +61,30 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         usageTracker = UsageTracker(this)
+        appNetworkManager = AppNetworkManager(this)
+        firewallManager = AppFirewallManager(this)
 
         checkAndRequestPermissions()
 
         setContent {
             NetMetrTheme {
-                MainAppScreen(usageTracker = usageTracker)
+                MainAppScreen(
+                    usageTracker = usageTracker,
+                    appNetworkManager = appNetworkManager,
+                    firewallManager = firewallManager
+                )
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        appNetworkManager.startMonitoring()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        appNetworkManager.stopMonitoring()
     }
 
     private fun checkAndRequestPermissions() {
@@ -81,12 +103,17 @@ class MainActivity : ComponentActivity() {
 
 enum class ScreenTab {
     DASHBOARD,
+    APPS,
     HISTORY,
     SETTINGS
 }
 
 @Composable
-fun MainAppScreen(usageTracker: UsageTracker) {
+fun MainAppScreen(
+    usageTracker: UsageTracker,
+    appNetworkManager: AppNetworkManager,
+    firewallManager: AppFirewallManager
+) {
     var currentTab by remember { mutableStateOf(ScreenTab.DASHBOARD) }
     var settings by remember { mutableStateOf(usageTracker.getSettings()) }
     var historyList by remember { mutableStateOf(usageTracker.getHistoryList()) }
@@ -94,6 +121,7 @@ fun MainAppScreen(usageTracker: UsageTracker) {
     val speedState by NetworkSpeedService.speedFlow.collectAsState()
     val todayUsage by NetworkSpeedService.todayUsageFlow.collectAsState()
     val isServiceRunning by NetworkSpeedService.isServiceRunning.collectAsState()
+    val appsList by appNetworkManager.appsFlow.collectAsState()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -107,6 +135,20 @@ fun MainAppScreen(usageTracker: UsageTracker) {
                     onClick = { currentTab = ScreenTab.DASHBOARD },
                     icon = { Icon(Icons.Default.Speed, contentDescription = "Dashboard") },
                     label = { Text("Speed") },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = AccentSky,
+                        selectedTextColor = AccentSky,
+                        unselectedIconColor = TextMuted,
+                        unselectedTextColor = TextMuted,
+                        indicatorColor = SurfaceDark
+                    )
+                )
+
+                NavigationBarItem(
+                    selected = currentTab == ScreenTab.APPS,
+                    onClick = { currentTab = ScreenTab.APPS },
+                    icon = { Icon(Icons.Default.Security, contentDescription = "Apps & Firewall") },
+                    label = { Text("Apps") },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = AccentSky,
                         selectedTextColor = AccentSky,
@@ -149,13 +191,20 @@ fun MainAppScreen(usageTracker: UsageTracker) {
             }
         }
     ) { innerPadding ->
-        androidx.compose.foundation.layout.Box(modifier = Modifier.padding(innerPadding)) {
+        Box(modifier = Modifier.padding(innerPadding)) {
             when (currentTab) {
                 ScreenTab.DASHBOARD -> DashboardScreen(
                     speedState = speedState,
                     todayUsage = todayUsage,
                     isServiceRunning = isServiceRunning,
                     useBits = settings.useBits
+                )
+                ScreenTab.APPS -> AppsScreen(
+                    appsList = appsList,
+                    firewallManager = firewallManager,
+                    onAppBlockedChanged = { pkg, blocked ->
+                        firewallManager.setAppBlocked(pkg, blocked)
+                    }
                 )
                 ScreenTab.HISTORY -> HistoryScreen(
                     historyList = historyList

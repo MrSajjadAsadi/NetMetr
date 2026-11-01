@@ -38,6 +38,7 @@ public partial class MainWindow : Window
         _trayService = new TrayService();
         _trayService.OnShowHideRequested += Tray_OnShowHideRequested;
         _trayService.OnToggleCompactRequested += Tray_OnToggleCompactRequested;
+        _trayService.OnAppsRequested += OpenAppsWindow;
         _trayService.OnSettingsRequested += OpenSettings;
         _trayService.OnResetTodayRequested += ResetTodayStats;
         _trayService.OnExitRequested += () => Application.Current.Shutdown();
@@ -291,6 +292,27 @@ public partial class MainWindow : Window
         {
             _settings.Unit = item.Tag?.ToString() == "Bits" ? SpeedUnit.BitsPerSecond : SpeedUnit.BytesPerSecond;
             _usageTracker.SaveSettings(_settings);
+        }
+    }
+
+    private AppsWindow? _appsWindow;
+
+    private void MenuApps_Click(object sender, RoutedEventArgs e)
+    {
+        OpenAppsWindow();
+    }
+
+    private void OpenAppsWindow()
+    {
+        if (_appsWindow == null || !_appsWindow.IsLoaded)
+        {
+            _appsWindow = new AppsWindow();
+            _appsWindow.Closed += (s, e) => _appsWindow = null;
+            _appsWindow.Show();
+        }
+        else
+        {
+            _appsWindow.Activate();
         }
     }
 

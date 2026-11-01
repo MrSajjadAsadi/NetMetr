@@ -12,6 +12,7 @@ public class TrayService : IDisposable
 
     public event Action? OnShowHideRequested;
     public event Action? OnToggleCompactRequested;
+    public event Action? OnAppsRequested;
     public event Action? OnSettingsRequested;
     public event Action? OnResetTodayRequested;
     public event Action? OnExitRequested;
@@ -34,6 +35,7 @@ public class TrayService : IDisposable
         var showHideItem = new ToolStripMenuItem("Show / Hide Widget", null, (s, e) => OnShowHideRequested?.Invoke());
         _compactItem = new ToolStripMenuItem("Compact Mode", null, (s, e) => OnToggleCompactRequested?.Invoke()) { CheckOnClick = true };
         var resetItem = new ToolStripMenuItem("Reset Today's Stats", null, (s, e) => OnResetTodayRequested?.Invoke());
+        var appsItem = new ToolStripMenuItem("App Network & Firewall...", null, (s, e) => OnAppsRequested?.Invoke());
         var settingsItem = new ToolStripMenuItem("Settings...", null, (s, e) => OnSettingsRequested?.Invoke());
         var exitItem = new ToolStripMenuItem("Exit NetMetr", null, (s, e) => OnExitRequested?.Invoke());
 
@@ -41,6 +43,7 @@ public class TrayService : IDisposable
         menu.Items.Add(_compactItem);
         menu.Items.Add(resetItem);
         menu.Items.Add(new ToolStripSeparator());
+        menu.Items.Add(appsItem);
         menu.Items.Add(settingsItem);
         menu.Items.Add(exitItem);
 

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="NetMetr Overlay"
-        FontFamily="Segoe UI Variable, Segoe UI, Tahoma, Vazirmatn, Arial, sans-serif"
+        FontFamily="{DynamicResource AppFont}"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
@@ -124,7 +124,7 @@
                         </Border>
 
                         <!-- Expand button -->
-                        <Button Click="BtnToggleCompact_Click"
+                        <Button x:Name="BtnExpand" Click="BtnToggleCompact_Click"
                                 Background="Transparent" BorderThickness="0"
                                 Foreground="#94A3B8" Content="▼" FontSize="9"
                                 Padding="3" Cursor="Hand" ToolTip="Expand Widget"/>
@@ -164,17 +164,17 @@
                                 </Border>
 
                                 <!-- Active Apps & Firewall Button -->
-                                <Button Click="MenuApps_Click" Background="Transparent" BorderThickness="0"
+                                <Button x:Name="BtnApps" Click="MenuApps_Click" Background="Transparent" BorderThickness="0"
                                         Foreground="#38BDF8" Content="🛡" FontSize="11" Margin="0,0,4,0"
                                         Padding="3" Cursor="Hand" ToolTip="App Network &amp; Firewall Manager"/>
 
                                 <!-- Settings Button -->
-                                <Button Click="MenuSettings_Click" Background="Transparent" BorderThickness="0"
+                                <Button x:Name="BtnSettings" Click="MenuSettings_Click" Background="Transparent" BorderThickness="0"
                                         Foreground="#94A3B8" Content="⚙" FontSize="12" Margin="0,0,4,0"
                                         Padding="3" Cursor="Hand" ToolTip="Settings"/>
 
                                 <!-- Minimize/Compact Button -->
-                                <Button Click="BtnToggleCompact_Click" Background="Transparent" BorderThickness="0"
+                                <Button x:Name="BtnCompact" Click="BtnToggleCompact_Click" Background="Transparent" BorderThickness="0"
                                         Foreground="#94A3B8" Content="▲" FontSize="10"
                                         Padding="3" Cursor="Hand" ToolTip="Compact Mode"/>
                             </StackPanel>
@@ -230,7 +230,7 @@
                                 <TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="11">
                                     <Run Text="↓ " Foreground="#10B981" FontWeight="Bold"/><Run x:Name="TxtTodayDown" Text="0 MB" Foreground="#E2E8F0" FontWeight="SemiBold"/>
                                     <Run Text="   ↑ " Foreground="#38BDF8" FontWeight="Bold"/><Run x:Name="TxtTodayUp" Text="0 MB" Foreground="#E2E8F0" FontWeight="SemiBold"/>
-                                    <Run Text="   (Total: " Foreground="#94A3B8"/><Run x:Name="TxtTodayTotal" Text="0 MB" Foreground="#CBD5E1" FontWeight="Bold"/><Run Text=")" Foreground="#94A3B8"/>
+                                    <Run x:Name="RunTodayTotalPrefix" Text="   (Total: " Foreground="#94A3B8"/><Run x:Name="TxtTodayTotal" Text="0 MB" Foreground="#CBD5E1" FontWeight="Bold"/><Run Text=")" Foreground="#94A3B8"/>
                                 </TextBlock>
                             </Grid>
                         </Border>

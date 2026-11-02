@@ -66,7 +66,7 @@ fun DailyUsageCard(
                     color = AccentPurple,
                     fontWeight = FontWeight.Bold,
                     fontSize = 12.sp,
-                    letterSpacing = 1.sp
+                    letterSpacing = if (lang == "fa") 0.sp else 1.sp
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Text(

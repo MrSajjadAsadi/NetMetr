@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.netmetr.app.ui.theme.SurfaceCard
 import com.netmetr.app.ui.theme.TextMuted
 import com.netmetr.app.ui.theme.TextPrimary
+import com.netmetr.app.util.AppStrings
 
 @Composable
 fun SpeedCard(
@@ -34,7 +35,8 @@ fun SpeedCard(
     speedFormatted: String,
     accentColor: Color,
     iconSymbol: String,
-    subtitle: String? = null
+    subtitle: String? = null,
+    lang: String = "fa"
 ) {
     Card(
         modifier = modifier,
@@ -67,11 +69,11 @@ fun SpeedCard(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    text = title.uppercase(),
+                    text = title,
                     color = accentColor,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp,
-                    letterSpacing = 1.sp
+                    fontSize = 13.sp,
+                    letterSpacing = if (lang == "fa") 0.sp else 1.sp
                 )
             }
 
@@ -87,7 +89,7 @@ fun SpeedCard(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = subtitle ?: "Real-time rate",
+                text = subtitle ?: AppStrings.get("realtime_rate", lang),
                 color = TextMuted,
                 fontSize = 11.sp
             )

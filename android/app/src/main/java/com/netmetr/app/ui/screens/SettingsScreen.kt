@@ -84,7 +84,7 @@ fun SettingsScreen(
                     color = AccentSky,
                     fontWeight = FontWeight.Bold,
                     fontSize = 12.sp,
-                    letterSpacing = 1.sp
+                    letterSpacing = if (lang == "fa") 0.sp else 1.sp
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -131,7 +131,7 @@ fun SettingsScreen(
                     color = AccentSky,
                     fontWeight = FontWeight.Bold,
                     fontSize = 12.sp,
-                    letterSpacing = 1.sp
+                    letterSpacing = if (lang == "fa") 0.sp else 1.sp
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -197,7 +197,7 @@ fun SettingsScreen(
                     color = AccentSky,
                     fontWeight = FontWeight.Bold,
                     fontSize = 12.sp,
-                    letterSpacing = 1.sp
+                    letterSpacing = if (lang == "fa") 0.sp else 1.sp
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -240,7 +240,7 @@ fun SettingsScreen(
                     color = AccentRed,
                     fontWeight = FontWeight.Bold,
                     fontSize = 12.sp,
-                    letterSpacing = 1.sp
+                    letterSpacing = if (lang == "fa") 0.sp else 1.sp
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -263,6 +263,35 @@ fun SettingsScreen(
                 ) {
                     Text(text = AppStrings.get("btn_reset_today", lang), fontWeight = FontWeight.Bold)
                 }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // About Card
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(containerColor = SurfaceCard),
+            border = BorderStroke(1.dp, SurfaceCardBorder)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = AppStrings.get("about_section", lang),
+                    color = AccentSky,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp,
+                    letterSpacing = if (lang == "fa") 0.sp else 1.sp
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = AppStrings.get("about_desc", lang),
+                    color = TextSecondary,
+                    fontSize = 12.sp,
+                    lineHeight = 18.sp
+                )
             }
         }
 

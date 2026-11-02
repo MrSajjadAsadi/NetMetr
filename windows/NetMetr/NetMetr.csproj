@@ -11,4 +11,10 @@
     <RootNamespace>NetMetr</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Resource Include="Fonts\*.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
 </Project>

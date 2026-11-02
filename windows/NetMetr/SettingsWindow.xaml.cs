@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Controls;
 using NetMetr.Helpers;
 using NetMetr.Models;
 using NetMetr.Services;
@@ -44,12 +45,13 @@ public partial class SettingsWindow : Window
             PingTargetHost = settings.PingTargetHost,
             EnablePing = settings.EnablePing,
             StartWithWindows = settings.StartWithWindows,
-            SnapToEdges = settings.SnapToEdges
+            SnapToEdges = settings.SnapToEdges,
+            Language = settings.Language
         };
 
         LoadUiValues();
         LoadHistoryData();
-        FlowDirection = LocalizationManager.CurrentFlowDirection;
+        ApplyLocalization();
     }
 
     private void LoadUiValues()
@@ -86,6 +88,64 @@ public partial class SettingsWindow : Window
         TxtPingHost.Text = UpdatedSettings.PingTargetHost;
     }
 
+    private void ApplyLocalization()
+    {
+        FlowDirection = LocalizationManager.CurrentFlowDirection;
+        Title = LocalizationManager.Get("SettingsTitle");
+
+        TxtHeaderTitle.Text = LocalizationManager.Get("SettingsHeader");
+        TxtHeaderSub.Text = LocalizationManager.Get("SettingsSubheader");
+
+        // Tabs
+        TabGeneral.Header = LocalizationManager.Get("GeneralTab");
+        TabNetwork.Header = LocalizationManager.Get("NetworkTab");
+        TabUsage.Header = LocalizationManager.Get("UsageTab");
+        TabAbout.Header = LocalizationManager.Get("AboutTab");
+
+        // General
+        TxtLblLangTitle.Text = LocalizationManager.Get("Language");
+        TxtBehaviorTitle.Text = LocalizationManager.Get("BehaviorSection");
+        ChkAlwaysOnTop.Content = LocalizationManager.Get("AlwaysOnTopDesc");
+        ChkLockPosition.Content = LocalizationManager.Get("LockPosDesc");
+        ChkSnapEdges.Content = LocalizationManager.Get("SnapEdgesDesc");
+        ChkStartOnBoot.Content = LocalizationManager.Get("StartOnBootDesc");
+        TxtTransparencyTitle.Text = LocalizationManager.Get("TransparencySection");
+        TxtLblOpacity.Text = LocalizationManager.Get("OpacityLabel");
+        ChkCompactDefault.Content = LocalizationManager.Get("CompactDefaultDesc");
+
+        // Network
+        TxtInterfaceTitle.Text = LocalizationManager.Get("NetworkSettingsSection");
+        TxtLblAdapter.Text = LocalizationManager.Get("AdapterLabel");
+        TxtLblSpeedUnit.Text = LocalizationManager.Get("SpeedUnitLabel");
+        CmbItemBytes.Content = LocalizationManager.Get("UnitBytesDesc");
+        CmbItemBits.Content = LocalizationManager.Get("UnitBitsDesc");
+        TxtLblInterval.Text = LocalizationManager.Get("RefreshRateLabel");
+        CmbItemFast.Content = LocalizationManager.Get("FastInterval");
+        CmbItemNormal.Content = LocalizationManager.Get("NormalInterval");
+        CmbItemRelaxed.Content = LocalizationManager.Get("RelaxedInterval");
+        TxtPingTitle.Text = LocalizationManager.Get("PingSection");
+        ChkEnablePing.Content = LocalizationManager.Get("EnablePingDesc");
+        TxtLblPingHost.Text = LocalizationManager.Get("PingHostLabel");
+
+        // Usage History
+        TxtLblCardToday.Text = LocalizationManager.Get("Today");
+        TxtLblCard7Days.Text = LocalizationManager.CurrentLanguage == "fa" ? "۷ روز گذشته" : "Last 7 Days";
+        TxtLblCard30Days.Text = LocalizationManager.CurrentLanguage == "fa" ? "۳۰ روز گذشته" : "Last 30 Days";
+        ColGridDate.Header = LocalizationManager.Get("ColDate");
+        ColGridDown.Header = LocalizationManager.Get("Download");
+        ColGridUp.Header = LocalizationManager.Get("Upload");
+        ColGridTotal.Header = LocalizationManager.Get("ColTotalUsage");
+
+        // About
+        TxtAboutDesc.Text = LocalizationManager.Get("AboutDesc");
+        TxtAboutFramework.Text = LocalizationManager.Get("AboutFramework");
+
+        // Buttons
+        BtnResetTodayStats.Content = LocalizationManager.Get("ResetToday");
+        BtnCancel.Content = LocalizationManager.Get("Cancel");
+        BtnSave.Content = LocalizationManager.Get("SaveApply");
+    }
+
     private void LoadHistoryData()
     {
         var records = _usageTracker.GetHistory(30);
@@ -120,16 +180,17 @@ public partial class SettingsWindow : Window
 
     private void CmbLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (CmbLanguage == null) return;
+        if (CmbLanguage == null || !IsLoaded) return;
         UpdatedSettings.Language = CmbLanguage.SelectedIndex == 1 ? "en" : "fa";
         LocalizationManager.SetLanguage(UpdatedSettings.Language);
-        FlowDirection = LocalizationManager.CurrentFlowDirection;
+        ApplyLocalization();
     }
 
     private void BtnResetToday_Click(object sender, RoutedEventArgs e)
     {
-        if (MessageBox.Show("Are you sure you want to reset today's statistics?", "Reset Today",
-            MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+        string prompt = LocalizationManager.Get("ConfirmReset");
+        string title = LocalizationManager.Get("ResetToday");
+        if (MessageBox.Show(prompt, title, MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
         {
             _usageTracker.ResetTodayUsage();
             LoadHistoryData();
@@ -138,6 +199,8 @@ public partial class SettingsWindow : Window
 
     private void BtnCancel_Click(object sender, RoutedEventArgs e)
     {
+        // Revert language if cancelled
+        LocalizationManager.SetLanguage(_originalSettings.Language);
         DialogResult = false;
         Close();
     }
@@ -165,16 +228,14 @@ public partial class SettingsWindow : Window
         };
 
         UpdatedSettings.EnablePing = ChkEnablePing.IsChecked == true;
-        UpdatedSettings.PingTargetHost = string.IsNullOrWhiteSpace(TxtPingHost.Text) ? "8.8.8.8" : TxtPingHost.Text.Trim();
+        UpdatedSettings.PingTargetHost = string.IsNullOrWhiteSpace(TxtPingHost.Text) ? "1.1.1.1" : TxtPingHost.Text.Trim();
 
-        bool startWithWindows = ChkStartOnBoot.IsChecked == true;
-        UpdatedSettings.StartWithWindows = startWithWindows;
-        AutoStartHelper.SetAutoStart(startWithWindows);
+        // Auto start
+        bool wantAutoStart = ChkStartOnBoot.IsChecked == true;
+        AutoStartHelper.SetAutoStart(wantAutoStart);
+        UpdatedSettings.StartWithWindows = wantAutoStart;
 
-        UpdatedSettings.Language = CmbLanguage.SelectedIndex == 1 ? "en" : "fa";
         LocalizationManager.SetLanguage(UpdatedSettings.Language);
-
-        _usageTracker.SaveSettings(UpdatedSettings);
 
         DialogResult = true;
         Close();

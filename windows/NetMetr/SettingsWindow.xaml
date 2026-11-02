@@ -5,16 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="NetMetr - Settings &amp; Usage History"
-        Height="540" Width="680"
+        Height="560" Width="700"
         WindowStartupLocation="CenterScreen"
         Background="#0F172A"
         Foreground="#F8FAFC"
-        FontFamily="Segoe UI Variable, Segoe UI, sans-serif"
+        FontFamily="{DynamicResource AppFont}"
         ResizeMode="CanResizeWithGrip">
 
     <Window.Resources>
         <!-- TabItem Style -->
         <Style TargetType="TabItem">
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#94A3B8"/>
             <Setter Property="FontSize" Value="13"/>
@@ -40,16 +41,9 @@
             </Setter>
         </Style>
 
-        <!-- CheckBox Style -->
-        <Style TargetType="CheckBox">
-            <Setter Property="Foreground" Value="#E2E8F0"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Margin" Value="0,6"/>
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-
         <!-- Modern ComboBox -->
         <Style TargetType="ComboBox">
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}"/>
             <Setter Property="Background" Value="#1E293B"/>
             <Setter Property="Foreground" Value="#F8FAFC"/>
             <Setter Property="BorderBrush" Value="#334155"/>
@@ -59,6 +53,7 @@
 
         <!-- Modern Button -->
         <Style TargetType="Button">
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}"/>
             <Setter Property="Background" Value="#2563EB"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -101,12 +96,12 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <Border Background="#2563EB" CornerRadius="8" Width="32" Height="32" Margin="0,0,12,0">
-                    <TextBlock Text="⚡" Foreground="White" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Border Background="#2563EB" CornerRadius="8" Width="36" Height="36" Margin="0,0,12,0">
+                    <TextBlock Text="⚡" Foreground="White" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
                 <StackPanel>
-                    <TextBlock Text="NetMetr Settings" FontSize="18" FontWeight="Bold" Foreground="#F8FAFC"/>
-                    <TextBlock Text="Real-time Network Monitor &amp; Data Tracker" FontSize="12" Foreground="#94A3B8"/>
+                    <TextBlock x:Name="TxtHeaderTitle" Text="NetMetr Settings" FontSize="18" FontWeight="Bold" Foreground="#F8FAFC"/>
+                    <TextBlock x:Name="TxtHeaderSub" Text="Real-time Network Monitor &amp; Data Tracker" FontSize="12" Foreground="#94A3B8"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
@@ -114,13 +109,13 @@
         <!-- Tabs Content -->
         <TabControl Grid.Row="1" Background="Transparent" BorderThickness="0">
             <!-- TAB 1: General -->
-            <TabItem Header="⚙ General">
+            <TabItem x:Name="TabGeneral" Header="⚙ عمومی">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,12,0,0">
                     <StackPanel>
                         <!-- Language Card -->
                         <Border Background="#1E293B" CornerRadius="8" Padding="16" BorderBrush="#334155" BorderThickness="1" Margin="0,0,0,14">
                             <StackPanel>
-                                <TextBlock x:Name="TxtLblLangTitle" Text="Language / زبان برنامه" FontWeight="Bold" FontSize="14" Foreground="#38BDF8" Margin="0,0,0,10"/>
+                                <TextBlock x:Name="TxtLblLangTitle" Text="زبان برنامه (Language):" FontWeight="Bold" FontSize="14" Foreground="#38BDF8" Margin="0,0,0,10"/>
                                 <ComboBox x:Name="CmbLanguage" SelectionChanged="CmbLanguage_SelectionChanged">
                                     <ComboBoxItem Content="فارسی (Persian - راست‌چین)"/>
                                     <ComboBoxItem Content="English (Left-to-Right)"/>
@@ -128,32 +123,38 @@
                             </StackPanel>
                         </Border>
 
+                        <!-- Window Behavior (Toggle Switches) -->
                         <Border Background="#1E293B" CornerRadius="8" Padding="16" BorderBrush="#334155" BorderThickness="1" Margin="0,0,0,14">
                             <StackPanel>
-                                <TextBlock Text="Window Behavior" FontWeight="Bold" FontSize="14" Foreground="#38BDF8" Margin="0,0,0,10"/>
-                                <CheckBox x:Name="ChkAlwaysOnTop" Content="Always on Top (Keep widget above other applications)"/>
-                                <CheckBox x:Name="ChkLockPosition" Content="Lock Widget Position (Prevent accidental dragging)"/>
-                                <CheckBox x:Name="ChkSnapEdges" Content="Snap to Screen Edges when dragging"/>
-                                <CheckBox x:Name="ChkStartOnBoot" Content="Start NetMetr automatically with Windows"/>
+                                <TextBlock x:Name="TxtBehaviorTitle" Text="رفتار پنجره و سیستم" FontWeight="Bold" FontSize="14" Foreground="#38BDF8" Margin="0,0,0,12"/>
+                                <CheckBox x:Name="ChkAlwaysOnTop" Content="نمایش بالاتر از سایر پنجره‌ها (Always on Top)"/>
+                                <Separator Background="#263449" Margin="0,4"/>
+                                <CheckBox x:Name="ChkLockPosition" Content="قفل کردن موقعیت ویجت روی صفحه (جلوگیری از جابجایی)"/>
+                                <Separator Background="#263449" Margin="0,4"/>
+                                <CheckBox x:Name="ChkSnapEdges" Content="چسبیدن هوشمند به حاشیه مانیتور هنگام جابجایی"/>
+                                <Separator Background="#263449" Margin="0,4"/>
+                                <CheckBox x:Name="ChkStartOnBoot" Content="اجرای خودکار هنگام بالا آمدن ویندوز"/>
                             </StackPanel>
                         </Border>
 
+                        <!-- Transparency & Appearance -->
                         <Border Background="#1E293B" CornerRadius="8" Padding="16" BorderBrush="#334155" BorderThickness="1">
                             <StackPanel>
-                                <TextBlock Text="Transparency &amp; View" FontWeight="Bold" FontSize="14" Foreground="#38BDF8" Margin="0,0,0,10"/>
+                                <TextBlock x:Name="TxtTransparencyTitle" Text="میزان شفافیت و نما" FontWeight="Bold" FontSize="14" Foreground="#38BDF8" Margin="0,0,0,12"/>
 
                                 <Grid Margin="0,4,0,10">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Widget Opacity" VerticalAlignment="Center" Foreground="#E2E8F0"/>
+                                    <TextBlock x:Name="TxtLblOpacity" Text="میزان شفافیت ویجت:" VerticalAlignment="Center" Foreground="#E2E8F0"/>
                                     <TextBlock x:Name="TxtOpacityValue" Grid.Column="1" Text="92%" Foreground="#94A3B8" FontWeight="SemiBold"/>
                                 </Grid>
                                 <Slider x:Name="SliderOpacity" Minimum="0.3" Maximum="1.0" Value="0.92" TickFrequency="0.05"
-                                        ValueChanged="SliderOpacity_ValueChanged" Margin="0,0,0,8"/>
+                                        ValueChanged="SliderOpacity_ValueChanged" Margin="0,0,0,12"/>
 
-                                <CheckBox x:Name="ChkCompactDefault" Content="Launch in Compact Mode by default"/>
+                                <Separator Background="#263449" Margin="0,4"/>
+                                <CheckBox x:Name="ChkCompactDefault" Content="اجرای اولیه در حالت فشرده (Pill)"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>
@@ -161,42 +162,42 @@
             </TabItem>
 
             <!-- TAB 2: Network & Monitoring -->
-            <TabItem Header="🌐 Network">
+            <TabItem x:Name="TabNetwork" Header="🌐 شبکه">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,12,0,0">
                     <StackPanel>
                         <Border Background="#1E293B" CornerRadius="8" Padding="16" BorderBrush="#334155" BorderThickness="1" Margin="0,0,0,14">
                             <StackPanel>
-                                <TextBlock Text="Interface &amp; Units" FontWeight="Bold" FontSize="14" Foreground="#38BDF8" Margin="0,0,0,12"/>
+                                <TextBlock x:Name="TxtInterfaceTitle" Text="تنظیمات اتصال و کارت شبکه" FontWeight="Bold" FontSize="14" Foreground="#38BDF8" Margin="0,0,0,12"/>
 
-                                <TextBlock Text="Network Adapter:" Foreground="#CBD5E1" Margin="0,0,0,4"/>
+                                <TextBlock x:Name="TxtLblAdapter" Text="کارت شبکه فعال:" Foreground="#CBD5E1" Margin="0,0,0,4"/>
                                 <ComboBox x:Name="CmbAdapters" DisplayMemberPath="Name" Margin="0,0,0,14"/>
 
-                                <TextBlock Text="Speed Display Unit:" Foreground="#CBD5E1" Margin="0,0,0,4"/>
+                                <TextBlock x:Name="TxtLblSpeedUnit" Text="واحد نمایش سرعت:" Foreground="#CBD5E1" Margin="0,0,0,4"/>
                                 <ComboBox x:Name="CmbSpeedUnits" Margin="0,0,0,14">
-                                    <ComboBoxItem Content="Bytes/second (B/s, KB/s, MB/s, GB/s)"/>
-                                    <ComboBoxItem Content="Bits/second (bps, Kbps, Mbps, Gbps)"/>
+                                    <ComboBoxItem x:Name="CmbItemBytes" Content="بایت بر ثانیه (B/s, KB/s, MB/s)"/>
+                                    <ComboBoxItem x:Name="CmbItemBits" Content="بیت بر ثانیه (bps, Kbps, Mbps)"/>
                                 </ComboBox>
 
-                                <TextBlock Text="Refresh Interval:" Foreground="#CBD5E1" Margin="0,0,0,4"/>
+                                <TextBlock x:Name="TxtLblInterval" Text="نرخ بروزرسانی سرعت:" Foreground="#CBD5E1" Margin="0,0,0,4"/>
                                 <ComboBox x:Name="CmbInterval">
-                                    <ComboBoxItem Content="500 ms (Fastest response)"/>
-                                    <ComboBoxItem Content="1000 ms (Default, Recommended)"/>
-                                    <ComboBoxItem Content="2000 ms (Lowest CPU usage)"/>
+                                    <ComboBoxItem x:Name="CmbItemFast" Content="۵۰۰ میلی‌ثانیه (بسیار سریع و نرم)"/>
+                                    <ComboBoxItem x:Name="CmbItemNormal" Content="۱۰۰۰ میلی‌ثانیه (استاندارد - ۱ ثانیه)"/>
+                                    <ComboBoxItem x:Name="CmbItemRelaxed" Content="۲۰۰۰ میلی‌ثانیه (مصرف باتری کمتر)"/>
                                 </ComboBox>
                             </StackPanel>
                         </Border>
 
                         <Border Background="#1E293B" CornerRadius="8" Padding="16" BorderBrush="#334155" BorderThickness="1">
                             <StackPanel>
-                                <TextBlock Text="Latency / Ping Monitor" FontWeight="Bold" FontSize="14" Foreground="#38BDF8" Margin="0,0,0,10"/>
-                                <CheckBox x:Name="ChkEnablePing" Content="Enable Real-Time Ping Monitoring"/>
+                                <TextBlock x:Name="TxtPingTitle" Text="سنجش زنده پینگ و تاخیر شبکه" FontWeight="Bold" FontSize="14" Foreground="#38BDF8" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ChkEnablePing" Content="فعال بودن سنجش زنده پینگ اینترنت"/>
 
-                                <Grid Margin="0,8,0,0">
+                                <Grid Margin="0,10,0,0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Ping Host:" Foreground="#CBD5E1" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                    <TextBlock x:Name="TxtLblPingHost" Text="سرور مقصد پینگ:" Foreground="#CBD5E1" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                     <TextBox x:Name="TxtPingHost" Grid.Column="1" Background="#0F172A" Foreground="#F8FAFC"
                                              BorderBrush="#334155" Padding="8,4" FontSize="13"/>
                                 </Grid>
@@ -207,7 +208,7 @@
             </TabItem>
 
             <!-- TAB 3: Usage History -->
-            <TabItem Header="📊 Usage History">
+            <TabItem x:Name="TabUsage" Header="📊 سوابق مصرف">
                 <Grid Margin="0,12,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -227,7 +228,7 @@
                         <!-- Today Card -->
                         <Border Grid.Column="0" Background="#1E293B" CornerRadius="8" Padding="12,10" BorderBrush="#10B981" BorderThickness="1">
                             <StackPanel>
-                                <TextBlock Text="TODAY" FontSize="10" FontWeight="Bold" Foreground="#10B981"/>
+                                <TextBlock x:Name="TxtLblCardToday" Text="امروز" FontSize="10.5" FontWeight="Bold" Foreground="#10B981"/>
                                 <TextBlock x:Name="TxtCardToday" Text="0 MB" FontSize="16" FontWeight="Bold" Foreground="#F8FAFC" Margin="0,2,0,0"/>
                             </StackPanel>
                         </Border>
@@ -235,7 +236,7 @@
                         <!-- 7 Days Card -->
                         <Border Grid.Column="2" Background="#1E293B" CornerRadius="8" Padding="12,10" BorderBrush="#38BDF8" BorderThickness="1">
                             <StackPanel>
-                                <TextBlock Text="LAST 7 DAYS" FontSize="10" FontWeight="Bold" Foreground="#38BDF8"/>
+                                <TextBlock x:Name="TxtLblCard7Days" Text="۷ روز گذشته" FontSize="10.5" FontWeight="Bold" Foreground="#38BDF8"/>
                                 <TextBlock x:Name="TxtCard7Days" Text="0 MB" FontSize="16" FontWeight="Bold" Foreground="#F8FAFC" Margin="0,2,0,0"/>
                             </StackPanel>
                         </Border>
@@ -243,7 +244,7 @@
                         <!-- 30 Days Card -->
                         <Border Grid.Column="4" Background="#1E293B" CornerRadius="8" Padding="12,10" BorderBrush="#A78BFA" BorderThickness="1">
                             <StackPanel>
-                                <TextBlock Text="LAST 30 DAYS" FontSize="10" FontWeight="Bold" Foreground="#A78BFA"/>
+                                <TextBlock x:Name="TxtLblCard30Days" Text="۳۰ روز گذشته" FontSize="10.5" FontWeight="Bold" Foreground="#A78BFA"/>
                                 <TextBlock x:Name="TxtCard30Days" Text="0 MB" FontSize="16" FontWeight="Bold" Foreground="#F8FAFC" Margin="0,2,0,0"/>
                             </StackPanel>
                         </Border>
@@ -257,6 +258,7 @@
                                   BorderThickness="0" HeadersVisibility="Column">
                             <DataGrid.ColumnHeaderStyle>
                                 <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="FontFamily" Value="{DynamicResource AppFont}"/>
                                     <Setter Property="Background" Value="#0F172A"/>
                                     <Setter Property="Foreground" Value="#94A3B8"/>
                                     <Setter Property="FontWeight" Value="SemiBold"/>
@@ -266,10 +268,10 @@
                                 </Style>
                             </DataGrid.ColumnHeaderStyle>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="120"/>
-                                <DataGridTextColumn Header="Downloaded" Binding="{Binding DownloadFormatted}" Width="*"/>
-                                <DataGridTextColumn Header="Uploaded" Binding="{Binding UploadFormatted}" Width="*"/>
-                                <DataGridTextColumn Header="Total Usage" Binding="{Binding TotalFormatted}" Width="*"/>
+                                <DataGridTextColumn x:Name="ColGridDate" Header="تاریخ" Binding="{Binding Date}" Width="120"/>
+                                <DataGridTextColumn x:Name="ColGridDown" Header="دانلود" Binding="{Binding DownloadFormatted}" Width="*"/>
+                                <DataGridTextColumn x:Name="ColGridUp" Header="آپلود" Binding="{Binding UploadFormatted}" Width="*"/>
+                                <DataGridTextColumn x:Name="ColGridTotal" Header="مجموع مصرف" Binding="{Binding TotalFormatted}" Width="*"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </Border>
@@ -277,20 +279,20 @@
             </TabItem>
 
             <!-- TAB 4: About -->
-            <TabItem Header="ℹ About">
+            <TabItem x:Name="TabAbout" Header="ℹ درباره">
                 <Border Background="#1E293B" CornerRadius="8" Padding="20" Margin="0,12,0,0" BorderBrush="#334155" BorderThickness="1">
                     <StackPanel>
-                        <TextBlock Text="NetMetr v1.0.0" FontSize="16" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,8"/>
-                        <TextBlock Text="A modern, high-performance network speed meter and bandwidth tracker for Windows &amp; Android."
-                                   Foreground="#CBD5E1" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                        <TextBlock Text="نت‌متر (NetMetr) v2.0" FontSize="16" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,8"/>
+                        <TextBlock x:Name="TxtAboutDesc"
+                                   Text="نرم‌افزار سبک، مدرن و مینیمال جهت رصد لحظه‌ای سرعت دانلود، آپلود، ترافیک مصرفی روزانه و مدیریت فایروال برنامه‌ها."
+                                   Foreground="#CBD5E1" TextWrapping="Wrap" Margin="0,0,0,10" LineHeight="20"/>
                         <Separator Background="#334155" Margin="0,0,0,10"/>
-                        <TextBlock Text="Features:" FontWeight="Bold" Foreground="#F8FAFC" Margin="0,0,0,6"/>
-                        <TextBlock Text="• Draggable floating overlay with snap-to-edge support" Foreground="#94A3B8" Margin="0,0,0,4"/>
-                        <TextBlock Text="• Real-time download/upload speed waveform sparkline" Foreground="#94A3B8" Margin="0,0,0,4"/>
-                        <TextBlock Text="• Low-latency ping &amp; connection status monitor" Foreground="#94A3B8" Margin="0,0,0,4"/>
-                        <TextBlock Text="• Daily bandwidth tracking with historical logs" Foreground="#94A3B8" Margin="0,0,0,4"/>
-                        <TextBlock Text="• Ultra-lightweight resource usage (~0.1% CPU)" Foreground="#94A3B8" Margin="0,0,0,4"/>
-                        <TextBlock Text="• Paired companion Android application with ongoing notification" Foreground="#94A3B8" Margin="0,0,0,4"/>
+                        <TextBlock x:Name="TxtAboutFramework"
+                                   Text="توسعه‌یافته با C# .NET 10 و WPF برای ویندوز، و Jetpack Compose برای اندروید."
+                                   Foreground="#94A3B8" Margin="0,0,0,6"/>
+                        <TextBlock x:Name="TxtAboutGithub"
+                                   Text="مخزن رسمی: https://github.com/MrSajjadAsadi/NetMetr"
+                                   Foreground="#38BDF8" FontWeight="SemiBold" Margin="0,0,0,4"/>
                     </StackPanel>
                 </Border>
             </TabItem>
@@ -304,11 +306,11 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Button Content="Reset Today Stats" Background="#DC2626" Click="BtnResetToday_Click"/>
+            <Button x:Name="BtnResetTodayStats" Content="صفر کردن آمار امروز" Background="#DC2626" Click="BtnResetToday_Click"/>
 
             <StackPanel Grid.Column="2" Orientation="Horizontal">
-                <Button Content="Cancel" Background="#334155" Margin="0,0,10,0" Click="BtnCancel_Click"/>
-                <Button Content="Save &amp; Apply" Background="#2563EB" Click="BtnSave_Click"/>
+                <Button x:Name="BtnCancel" Content="انصراف" Background="#334155" Margin="0,0,10,0" Click="BtnCancel_Click"/>
+                <Button x:Name="BtnSave" Content="ذخیره و اعمال تنظیمات" Background="#2563EB" Click="BtnSave_Click"/>
             </StackPanel>
         </Grid>
     </Grid>

@@ -45,8 +45,12 @@ public static class Formatter
 
     public static string FormatLatency(long latencyMs, bool isConnected = true)
     {
-        if (!isConnected) return "Offline";
-        if (latencyMs < 0) return "-- ms";
-        return $"{latencyMs} ms";
+        if (!isConnected)
+            return LocalizationManager.Get("Offline");
+
+        if (latencyMs < 0)
+            return "--" + LocalizationManager.Get("Milliseconds");
+
+        return $"{latencyMs}{LocalizationManager.Get("Milliseconds")}";
     }
 }

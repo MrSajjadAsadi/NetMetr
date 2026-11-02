@@ -4,21 +4,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="NetMetr - App Network &amp; Firewall Manager"
-        Height="600" Width="850"
-        MinHeight="450" MinWidth="650"
+        Title="نت‌متر - مدیریت مصرف و فایروال برنامه‌ها"
+        Height="620" Width="880"
+        MinHeight="480" MinWidth="680"
         WindowStartupLocation="CenterScreen"
         Background="#0F172A"
         Foreground="#F8FAFC"
-        FontFamily="Segoe UI Variable, Segoe UI, sans-serif"
+        FontFamily="{DynamicResource AppFont}"
         Loaded="Window_Loaded"
         Closing="Window_Closing">
 
     <Window.Resources>
-        <!-- Modern Button Style -->
+        <!-- Modern Action Button Style -->
         <Style x:Key="ActionButton" TargetType="Button">
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Padding" Value="12,6"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -33,19 +34,37 @@
             </Setter>
         </Style>
 
-        <Style x:Key="BlockButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
-            <Setter Property="Background" Value="#EF4444"/>
-            <Setter Property="Foreground" Value="White"/>
-        </Style>
-
-        <Style x:Key="UnblockButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
-            <Setter Property="Background" Value="#10B981"/>
-            <Setter Property="Foreground" Value="White"/>
-        </Style>
-
         <Style x:Key="KillButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
             <Setter Property="Background" Value="#334155"/>
             <Setter Property="Foreground" Value="#CBD5E1"/>
+        </Style>
+
+        <Style x:Key="FilterChipButton" TargetType="RadioButton">
+            <Setter Property="FontFamily" Value="{DynamicResource AppFont}"/>
+            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="ChipBorder" Background="#1E293B" BorderBrush="#334155" BorderThickness="1" CornerRadius="14" Padding="12,5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="ChipBorder" Property="Background" Value="#2563EB"/>
+                                <Setter TargetName="ChipBorder" Property="BorderBrush" Value="#38BDF8"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ChipBorder" Property="BorderBrush" Value="#60A5FA"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
 
@@ -69,28 +88,28 @@
                     <TextBlock Text="🛡" Foreground="White" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
                 <StackPanel>
-                    <TextBlock Text="Active Applications &amp; Network Firewall" FontSize="18" FontWeight="Bold" Foreground="#F8FAFC"/>
-                    <TextBlock Text="Real-time per-app bandwidth usage and instant internet blocking" FontSize="12" Foreground="#94A3B8"/>
+                    <TextBlock x:Name="TxtHeaderTitle" Text="Active Applications &amp; Network Firewall" FontSize="18" FontWeight="Bold" Foreground="#F8FAFC"/>
+                    <TextBlock x:Name="TxtHeaderSub" Text="Real-time per-app bandwidth usage and instant internet blocking" FontSize="12" Foreground="#94A3B8"/>
                 </StackPanel>
             </StackPanel>
 
             <Border Grid.Column="1" Background="#1E293B" CornerRadius="8" Padding="12,6" BorderBrush="#334155" BorderThickness="1">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="Active Network Apps: " Foreground="#94A3B8" FontSize="12"/>
+                    <TextBlock x:Name="TxtLblActiveApps" Text="Active Network Apps: " Foreground="#94A3B8" FontSize="12"/>
                     <TextBlock x:Name="TxtTotalApps" Text="0" Foreground="#38BDF8" FontWeight="Bold" FontSize="13"/>
                 </StackPanel>
             </Border>
         </Grid>
 
-        <!-- Search Bar and Controls -->
+        <!-- Search Bar and Filter Chips -->
         <Grid Grid.Row="1" Margin="0,0,0,12">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="280"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <!-- Search box -->
-            <Border Background="#1E293B" CornerRadius="8" BorderBrush="#334155" BorderThickness="1" Padding="8,4">
+            <Border Grid.Column="0" Background="#1E293B" CornerRadius="8" BorderBrush="#334155" BorderThickness="1" Padding="10,6">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -102,6 +121,13 @@
                              VerticalAlignment="Center"/>
                 </Grid>
             </Border>
+
+            <!-- Filter Chips -->
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <RadioButton x:Name="RadioFilterAll" Content="همه برنامه‌ها" Style="{StaticResource FilterChipButton}" IsChecked="True" Checked="Filter_Checked"/>
+                <RadioButton x:Name="RadioFilterActive" Content="در حال مصرف دیتا" Style="{StaticResource FilterChipButton}" Checked="Filter_Checked"/>
+                <RadioButton x:Name="RadioFilterBlocked" Content="مسدودشده‌ها" Style="{StaticResource FilterChipButton}" Checked="Filter_Checked"/>
+            </StackPanel>
         </Grid>
 
         <!-- Data Grid of Network Applications -->
@@ -113,6 +139,7 @@
                       RowHeight="44">
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="FontFamily" Value="{DynamicResource AppFont}"/>
                         <Setter Property="Background" Value="#0F172A"/>
                         <Setter Property="Foreground" Value="#94A3B8"/>
                         <Setter Property="FontWeight" Value="SemiBold"/>
@@ -123,7 +150,7 @@
                 </DataGrid.ColumnHeaderStyle>
                 <DataGrid.Columns>
                     <!-- App Icon and Name -->
-                    <DataGridTemplateColumn Header="Application" Width="2*">
+                    <DataGridTemplateColumn x:Name="ColHeaderApp" Header="نرم‌افزار" Width="2*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="4,0">
@@ -138,7 +165,7 @@
                     </DataGridTemplateColumn>
 
                     <!-- Download Speed -->
-                    <DataGridTemplateColumn Header="Download" Width="1.1*">
+                    <DataGridTemplateColumn x:Name="ColHeaderDown" Header="دانلود" Width="1.1*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding DownloadSpeedFormatted}" Foreground="#10B981" FontWeight="Bold"
@@ -148,7 +175,7 @@
                     </DataGridTemplateColumn>
 
                     <!-- Upload Speed -->
-                    <DataGridTemplateColumn Header="Upload" Width="1.1*">
+                    <DataGridTemplateColumn x:Name="ColHeaderUp" Header="آپلود" Width="1.1*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding UploadSpeedFormatted}" Foreground="#38BDF8" FontWeight="Bold"
@@ -158,7 +185,7 @@
                     </DataGridTemplateColumn>
 
                     <!-- Total Usage -->
-                    <DataGridTemplateColumn Header="Session Total" Width="1.1*">
+                    <DataGridTemplateColumn x:Name="ColHeaderTotal" Header="کل مصرف" Width="1.1*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding TotalUsageFormatted}" Foreground="#A78BFA" FontWeight="SemiBold"
@@ -168,10 +195,10 @@
                     </DataGridTemplateColumn>
 
                     <!-- Connections -->
-                    <DataGridTextColumn Header="Sockets" Binding="{Binding ActiveConnectionsCount}" Width="80"/>
+                    <DataGridTextColumn x:Name="ColHeaderSockets" Header="سوکت‌ها" Binding="{Binding ActiveConnectionsCount}" Width="80"/>
 
                     <!-- Status -->
-                    <DataGridTemplateColumn Header="Status" Width="95">
+                    <DataGridTemplateColumn x:Name="ColHeaderStatus" Header="وضعیت" Width="100">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Border CornerRadius="4" Padding="6,2" HorizontalAlignment="Left" VerticalAlignment="Center">
@@ -193,7 +220,7 @@
                     </DataGridTemplateColumn>
 
                     <!-- Actions -->
-                    <DataGridTemplateColumn Header="Firewall Control" Width="170">
+                    <DataGridTemplateColumn x:Name="ColHeaderControl" Header="مدیریت فایروال" Width="180">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -214,7 +241,7 @@
                                     </Button>
 
                                     <!-- End Task -->
-                                    <Button Content="End Task" Style="{StaticResource KillButton}"
+                                    <Button x:Name="BtnEndTaskItem" Content="بستن برنامه" Style="{StaticResource KillButton}"
                                             Click="BtnKillProcess_Click"/>
                                 </StackPanel>
                             </DataTemplate>
@@ -231,11 +258,12 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="💡 Blocking an application creates an instant Windows Firewall rule blocking all inbound and outbound internet traffic."
+            <TextBlock x:Name="TxtFirewallTip"
+                       Text="💡 مسدود کردن یک نرم‌افزار بلافاصله قانونی در فایروال ویندوز ایجاد کرده و مانع از ارسال و دریافت دیتا می‌شود."
                        Foreground="#64748B" FontSize="12" VerticalAlignment="Center"/>
 
-            <Button Grid.Column="1" Content="Close" Background="#334155" Style="{StaticResource ActionButton}"
-                    Padding="18,6" Click="BtnClose_Click"/>
+            <Button x:Name="BtnClose" Grid.Column="1" Content="بستن" Background="#334155" Style="{StaticResource ActionButton}"
+                    Padding="22,6" Click="BtnClose_Click"/>
         </Grid>
     </Grid>
 </Window>

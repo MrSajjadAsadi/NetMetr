@@ -102,7 +102,7 @@ fun DashboardScreen(
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = speedState.networkType,
+                        text = AppStrings.localizeNetworkType(speedState.networkType, lang),
                         color = TextPrimary,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.SemiBold
@@ -181,7 +181,8 @@ fun DashboardScreen(
                 speedFormatted = downFormatted,
                 accentColor = AccentGreen,
                 iconSymbol = "↓",
-                subtitle = AppStrings.get("realtime_rate", lang)
+                subtitle = AppStrings.get("realtime_rate", lang),
+                lang = lang
             )
 
             SpeedCard(
@@ -190,7 +191,8 @@ fun DashboardScreen(
                 speedFormatted = upFormatted,
                 accentColor = AccentSky,
                 iconSymbol = "↑",
-                subtitle = AppStrings.get("realtime_rate", lang)
+                subtitle = AppStrings.get("realtime_rate", lang),
+                lang = lang
             )
         }
 

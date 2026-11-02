@@ -1,9 +1,86 @@
-﻿<Application x:Class="NetMetr.App"
+<Application x:Class="NetMetr.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:NetMetr"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <!-- Embedded Vazirmatn Font with system fallbacks -->
+        <FontFamily x:Key="AppFont">pack://application:,,,/Fonts/#Vazirmatn, Vazirmatn, Segoe UI Variable, Segoe UI, Tahoma, sans-serif</FontFamily>
+
+        <!-- Default font across all text and controls -->
+        <Style TargetType="Control" x:Key="BaseControlStyle">
+            <Setter Property="FontFamily" Value="{StaticResource AppFont}"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource AppFont}"/>
+        </Style>
+        <Style TargetType="Window">
+            <Setter Property="FontFamily" Value="{StaticResource AppFont}"/>
+        </Style>
+
+        <!-- Modern Toggle Switch Style for CheckBox -->
+        <Style TargetType="CheckBox" x:Key="ModernSwitchStyle">
+            <Setter Property="FontFamily" Value="{StaticResource AppFont}"/>
+            <Setter Property="Foreground" Value="#E2E8F0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Grid Background="Transparent" Margin="0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Switch Label & Description -->
+                            <ContentPresenter Grid.Column="0"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Left"
+                                              Margin="0,0,16,0"
+                                              RecognizesAccessKey="True"/>
+
+                            <!-- Pill Track & Thumb -->
+                            <Grid Grid.Column="1" Width="44" Height="24" VerticalAlignment="Center">
+                                <Border x:Name="SwitchTrack"
+                                        CornerRadius="12"
+                                        Background="#334155"
+                                        BorderBrush="#475569"
+                                        BorderThickness="1.2">
+                                    <Grid>
+                                        <Ellipse x:Name="SwitchThumb"
+                                                 Width="16" Height="16"
+                                                 Fill="#94A3B8"
+                                                 HorizontalAlignment="Left"
+                                                 Margin="3,0,0,0"
+                                                 VerticalAlignment="Center">
+                                            <Ellipse.Effect>
+                                                <DropShadowEffect BlurRadius="4" ShadowDepth="1" Direction="270" Color="#000000" Opacity="0.4"/>
+                                            </Ellipse.Effect>
+                                        </Ellipse>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="SwitchTrack" Property="Background" Value="#2563EB"/>
+                                <Setter TargetName="SwitchTrack" Property="BorderBrush" Value="#38BDF8"/>
+                                <Setter TargetName="SwitchThumb" Property="HorizontalAlignment" Value="Right"/>
+                                <Setter TargetName="SwitchThumb" Property="Margin" Value="0,0,3,0"/>
+                                <Setter TargetName="SwitchThumb" Property="Fill" Value="#FFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="SwitchTrack" Property="BorderBrush" Value="#60A5FA"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Apply ModernSwitchStyle as default for all CheckBoxes in the app -->
+        <Style TargetType="CheckBox" BasedOn="{StaticResource ModernSwitchStyle}"/>
     </Application.Resources>
 </Application>

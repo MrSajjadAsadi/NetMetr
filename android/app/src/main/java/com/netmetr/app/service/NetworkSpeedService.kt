@@ -184,13 +184,20 @@ class NetworkSpeedService : Service() {
         val upFormatted = SpeedFormatter.formatSpeed(txSpeed, settings.useBits)
         val title = "↓ $downFormatted   ↑ $upFormatted"
 
+        val lang = settings.language
         val body = if (settings.showDailyUsageInNotification) {
             val totalFormatted = SpeedFormatter.formatDataSize(todayItem.totalBytes)
             val wifiFormatted = SpeedFormatter.formatDataSize(todayItem.wifiTotal)
             val mobileFormatted = SpeedFormatter.formatDataSize(todayItem.mobileTotal)
-            "Today: $totalFormatted (Wi-Fi: $wifiFormatted • Mobile: $mobileFormatted)"
+            String.format(
+                com.netmetr.app.util.AppStrings.get("notif_today", lang),
+                totalFormatted, wifiFormatted, mobileFormatted
+            )
         } else {
-            "Network: ${networkInfo.typeName}"
+            String.format(
+                com.netmetr.app.util.AppStrings.get("notif_network", lang),
+                com.netmetr.app.util.AppStrings.localizeNetworkType(networkInfo.typeName, lang)
+            )
         }
 
         val notification = buildNotification(title, body)

@@ -103,13 +103,24 @@ public partial class MainWindow : Window
         TxtLblDown.Text = "↓ " + LocalizationManager.Get("Download");
         TxtLblUp.Text = "↑ " + LocalizationManager.Get("Upload");
         TxtLblToday.Text = LocalizationManager.Get("Today");
+        RunTodayTotalPrefix.Text = LocalizationManager.Get("TotalPrefix");
 
-        MenuHeaderTitle.Header = LocalizationManager.Get("AppName") + " Speed Meter";
+        BtnExpand.ToolTip = LocalizationManager.Get("TipExpand");
+        BtnCompact.ToolTip = LocalizationManager.Get("TipCompact");
+        BtnSettings.ToolTip = LocalizationManager.Get("TipSettings");
+        BtnApps.ToolTip = LocalizationManager.Get("TipFirewall");
+
+        MenuHeaderTitle.Header = LocalizationManager.Get("AppName") + " - " + LocalizationManager.Get("AppSubtitle");
         MenuCompactToggle.Header = _settings.IsCompactMode ? LocalizationManager.Get("ExpandedMode") : LocalizationManager.Get("CompactMode");
         MenuAlwaysOnTop.Header = LocalizationManager.Get("AlwaysOnTop");
         MenuLockPosition.Header = LocalizationManager.Get("LockPosition");
         MenuOpacityHeader.Header = LocalizationManager.Get("Opacity");
         MenuUnitHeader.Header = LocalizationManager.Get("SpeedUnit");
+        if (MenuUnitHeader.Items.Count >= 2)
+        {
+            if (MenuUnitHeader.Items[0] is MenuItem bytesItem) bytesItem.Header = LocalizationManager.Get("BytesUnit");
+            if (MenuUnitHeader.Items[1] is MenuItem bitsItem) bitsItem.Header = LocalizationManager.Get("BitsUnit");
+        }
         MenuAppsItem.Header = LocalizationManager.Get("AppManager");
         MenuSettingsItem.Header = LocalizationManager.Get("SettingsAndHistory");
         MenuResetItem.Header = LocalizationManager.Get("ResetToday");
